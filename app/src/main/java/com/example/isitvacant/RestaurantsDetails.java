@@ -338,6 +338,40 @@ public class RestaurantsDetails extends AppCompatActivity {
 
             }
         });
+        currentUid=mAuth.getCurrentUser().getUid();
+
+
+
+
+        DocumentReference reviewReference = mstore.collection("restaurants").document(proUid).collection("reviews").document(currentUid);
+        reviewReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+
+
+                //Picasso.get().load(documentSnapshot.getString("image")).into(circleImageView);
+                if (documentSnapshot.exists()) {
+
+
+                    String ratings = documentSnapshot.getString("rating");
+                    ratingBar.setRating(Float.parseFloat(ratings));
+                    dialog.dismiss();
+                }
+                else{
+                    ratingBar.setRating(0);
+                    dialog.dismiss();
+
+                }
+
+
+
+
+
+
+
+
+            }
+        });
 
 
     }
