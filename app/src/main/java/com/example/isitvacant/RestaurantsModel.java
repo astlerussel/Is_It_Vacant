@@ -2,19 +2,29 @@ package com.example.isitvacant;
 
 public class RestaurantsModel {
 
-    public String name , Address, image, discription,Type;
+    public String name , Address, image, discription,Type,total_rating;
 
     public RestaurantsModel()
     {
         //Empty Constructor needed
     }
 
-    public RestaurantsModel(String name, String Address, String image, String discription, String Type) {
+
+    public RestaurantsModel(String name, String Address, String image, String discription, String Type, String total_rating) {
         this.name = name;
         this.Address = Address;
         this.image = image;
         this.discription = discription;
         this.Type = Type;
+        this.total_rating = total_rating;
+    }
+
+    public String getTotal_rating() {
+        return total_rating;
+    }
+
+    public void setTotal_rating(String total_rating) {
+        this.total_rating = total_rating;
     }
 
     public String getName() {
