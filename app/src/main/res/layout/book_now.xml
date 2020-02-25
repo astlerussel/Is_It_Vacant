@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="520dp"
+    android:layout_gravity="bottom">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="10dp"
+        app:cardCornerRadius="20dp"
+        android:layout_alignParentBottom="true"
+        app:cardBackgroundColor="#fff"
+        app:cardElevation="10dp"
+        >
+        <RelativeLayout
+            android:id="@+id/details"
+            android:layout_width="match_parent"
+            android:layout_height="110dp">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/restaurant_image_card"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:cardElevation="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/restaurant_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/couples"
+
+            android:scaleType="fitXY"/>
+
+        </androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/restaurant_title"
+            android:layout_toRightOf="@id/restaurant_image_card"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginLeft="15dp"
+            android:hint="Title"
+            android:gravity="left|center"
+            android:textSize="18dp"
+            android:text="Kottara Food Court"
+            android:textColor="#000"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/resto_location"
+            android:layout_width="250dp"
+            android:layout_height="23dp"
+            android:layout_marginLeft="110dp"
+            android:layout_marginTop="38dp"
+            android:hint="Location"
+            android:text="Mangalore"
+            android:gravity="left|center"
+            android:textSize="13dp"
+            android:textStyle="normal"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="90dp"
+            android:layout_height="30dp"
+
+            android:layout_marginTop="120dp"
+            android:textStyle="bold"
+            android:text="TIME"
+            android:gravity="center"
+            android:textSize="22dp"
+            android:textColor="#000"
+
+            />
+        <TextView
+            android:layout_width="130dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="150dp"
+            android:text="Choose Your Slot"
+            android:layout_marginLeft="20dp"
+            />
+
+
+            <Button
+                android:id="@+id/Time_Slots"
+                android:layout_width="80dp"
+                android:layout_height="45dp"
+                android:hint="11:45"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="180dp"
+                android:background="@drawable/bg_button"
+               />
+
+
+        <TextView
+            android:layout_width="180dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="225dp"
+            android:text="How Many People?"
+            android:textColor="#000"
+            android:layout_marginHorizontal="100dp"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:gravity="center"
+            />
+
+
+
+            <Button
+                android:id="@+id/decrease"
+                android:layout_width="52dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="290dp"
+                android:layout_marginLeft="90dp"
+                android:onClick="decreaseInteger"
+                android:textAlignment="center"
+                android:text="-"
+             android:textStyle="bold"/>
+
+
+
+            <TextView
+                android:id="@+id/integer_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="165dp"
+                android:layout_marginTop="260dp"
+                android:text="0"
+                android:textColor="#000"
+                android:textStyle="bold"
+                android:textSize="70sp" />
+
+            <Button
+                android:id="@+id/increase"
+                android:layout_width="52dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="290dp"
+                android:layout_marginLeft="230dp"
+                android:onClick="increaseInteger"
+                android:text="+" />
+
+        <Button
+            android:id="@+id/Book"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            android:text="Book"
+            android:textAlignment="center"
+            android:textSize="22dp"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:background="#0091EA"
+            android:elevation="100dp"
+            />
+
+
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</RelativeLayout>

@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -41,6 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.isitvacant.R.anim.bottom_to_up;
 import static maes.tech.intentanim.CustomIntent.customType;
 
 public class RestaurantsDetails extends AppCompatActivity {
@@ -49,6 +54,7 @@ public class RestaurantsDetails extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference contactsRef ;
     private ReviewsAdapter adapter;
+    int minteger = 0;
     FirebaseFirestore mstore;
     Button submit_rat_bt,book_bt;
     FirebaseAuth mAuth;
@@ -63,6 +69,7 @@ public class RestaurantsDetails extends AppCompatActivity {
     Query query;
     String profileRestoName,proUid,total_rating,proRestoImage,proMobile,proRestoGstin,proRestoAddr,proRestoDesc,proRestoType,currentUserName,userProImage;
  Dialog dialog;
+ BottomSheetDialog dialog1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +84,6 @@ public class RestaurantsDetails extends AppCompatActivity {
         RESTO_NAME = findViewById(R.id.restoName);
         restoRating = findViewById(R.id.restaurant_rating_number);
         book_bt = findViewById(R.id.Book_now);
-
 
 
         Resto_Type = findViewById(R.id.resto_type);
@@ -95,9 +101,16 @@ public class RestaurantsDetails extends AppCompatActivity {
         book_bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RestaurantsDetails.this,BookingActivity.class);
+               /* Intent intent = new Intent(RestaurantsDetails.this,BookingActivity.class);
                 intent.putExtra("uid",proUid);
-                startActivity(intent);
+                startActivity(intent);*/
+
+                dialog1 = new BottomSheetDialog(RestaurantsDetails.this,R.style.book_now_pop);
+                dialog1.setContentView(R.layout.book_now);
+                dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog1.show();
+
+
             }
         });
 
@@ -131,8 +144,7 @@ public class RestaurantsDetails extends AppCompatActivity {
 
 
 
-                customType(RestaurantsDetails.this,"bottom-to-up");
-                dialog = new Dialog(RestaurantsDetails.this);
+                dialog = new Dialog(RestaurantsDetails.this,R.style.book_now_pop);
                 dialog.setContentView(R.layout.activity_pop_up_rating);
 
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -386,4 +398,19 @@ public class RestaurantsDetails extends AppCompatActivity {
 
 
     }
+    public void increaseInteger(View view) {
+        minteger = minteger + 1;
+        display(minteger);
+
+    }public void decreaseInteger(View view) {
+        minteger = minteger - 1;
+        display(minteger);
+    }
+
+    private void display(int number) {
+        TextView displayInteger = (TextView) dialog1.findViewById(
+                R.id.integer_number);
+        displayInteger.setText("" + number);
+    }
+
 }
