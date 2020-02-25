@@ -44,6 +44,8 @@ public class edit_profile extends AppCompatActivity {
         update_btn = findViewById(R.id.update_bt);
         ET_NAME = findViewById(R.id.update_user_name);
         mob = findViewById(R.id.update_mob);
+        mob.setEnabled(false);
+
         nation_tv = findViewById(R.id.nation_tv);
         gender_tv = findViewById(R.id.gender_tv);
         dob_tv1 = findViewById(R.id.dob_tv);

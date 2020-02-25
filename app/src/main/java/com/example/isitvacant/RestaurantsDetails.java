@@ -1,28 +1,24 @@
 package com.example.isitvacant;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -36,9 +32,13 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static maes.tech.intentanim.CustomIntent.customType;
@@ -50,18 +50,18 @@ public class RestaurantsDetails extends AppCompatActivity {
     private CollectionReference contactsRef ;
     private ReviewsAdapter adapter;
     FirebaseFirestore mstore;
-    Button submit_rat_bt;
+    Button submit_rat_bt,book_bt;
     FirebaseAuth mAuth;
     EditText reviewText;
     String ratingStr;
     String currentUid;
-    TextView RESTO_NAME,Resto_Type,Resto_location;
+    TextView RESTO_NAME,Resto_Type,Resto_location,restoRating;
      String review_text;
     ImageView Restaurant_image;
     RatingBar ratingBar,ratingBar2;
     Activity activity;
     Query query;
-    String profileRestoName,proUid,proRestoImage,proMobile,proRestoGstin,proRestoAddr,proRestoDesc,proRestoType,currentUserName,userProImage;
+    String profileRestoName,proUid,total_rating,proRestoImage,proMobile,proRestoGstin,proRestoAddr,proRestoDesc,proRestoType,currentUserName,userProImage;
  Dialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,14 +75,15 @@ public class RestaurantsDetails extends AppCompatActivity {
         mstore=FirebaseFirestore.getInstance();
         mAuth=FirebaseAuth.getInstance();
         RESTO_NAME = findViewById(R.id.restoName);
+        restoRating = findViewById(R.id.restaurant_rating_number);
+        book_bt = findViewById(R.id.Book_now);
 
 
 
         Resto_Type = findViewById(R.id.resto_type);
         Restaurant_image = findViewById(R.id.res_background_image);
         Resto_location = findViewById(R.id.resto_location);
-        RESTO_NAME.setText(profileRestoName);
-        Resto_Type.setText(proRestoType);
+
         currentUid= mAuth.getCurrentUser().getUid();
         proUid=getIntent().getStringExtra("uid");
         contactsRef = db.collection("/restaurants/"+proUid+"/reviews");
@@ -90,6 +91,15 @@ public class RestaurantsDetails extends AppCompatActivity {
         Resto_location.setText(proRestoAddr);
         Glide.with(getApplicationContext()).load(proRestoImage).into(Restaurant_image);
         ratingBar = findViewById(R.id.rating_bar);
+
+        book_bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RestaurantsDetails.this,BookingActivity.class);
+                intent.putExtra("uid",proUid);
+                startActivity(intent);
+            }
+        });
 
 
         DocumentReference documentReferences = mstore.collection("users").document(currentUid);
@@ -169,6 +179,74 @@ public class RestaurantsDetails extends AppCompatActivity {
                                 Toast.makeText(RestaurantsDetails.this, "Error" + error, Toast.LENGTH_LONG).show();
                             }
                         });
+
+
+
+                        mstore.collection("/restaurants/"+proUid+"/reviews")
+                                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable QuerySnapshot value,
+                                                        @Nullable FirebaseFirestoreException e) {
+
+
+                                        List<String> allRatings = new ArrayList<>();
+                                        for (QueryDocumentSnapshot doc : value) {
+                                            if (doc.get("rating") != null) {
+                                                allRatings.add(doc.getString("rating"));
+                                                //Toast.makeText(GroupProfileActivity.this, "Messages is: "+value,Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                        //Toast.makeText(GroupChatActivity.this, "Messages are: "+allMssages,Toast.LENGTH_LONG).show();
+
+
+                                        float sum=0;
+
+                                        for(int i=0; i<allRatings.size(); i++)
+
+                                        {
+
+
+
+                                            sum=sum+Float.parseFloat(allRatings.get(i));
+
+
+
+
+
+
+
+
+
+                                        }
+                                        float avg;
+                                        avg=sum/allRatings.size();
+                                        double roundAvg = Math.round(avg*10.0)/10.0;
+
+                                        Map<String, Object> totalRatingMap = new HashMap<>();
+                                        totalRatingMap.put("total_rating", String.valueOf(roundAvg));
+
+
+
+                                        mstore.collection("restaurants").document(proUid)
+                                                .update(totalRatingMap)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        //Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                                        //Toast.makeText(GroupProfileActivity.this, "Group Deleted", Toast.LENGTH_LONG).show();
+
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        String error = e.getMessage();
+                                                        Toast.makeText(RestaurantsDetails.this, "Error"+error, Toast.LENGTH_LONG).show();
+
+                                                    }
+                                                });
+                                    }
+                                });
                     }
                 });
 
@@ -225,7 +303,8 @@ public class RestaurantsDetails extends AppCompatActivity {
         adapter = new ReviewsAdapter(options);
 
         RecyclerView recyclerView = findViewById(R.id.reviews_recycler_list);
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(false);
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
@@ -254,11 +333,47 @@ public class RestaurantsDetails extends AppCompatActivity {
                 proRestoGstin=documentSnapshot.getString("GSTIN_NUMBER");
                 proRestoAddr=documentSnapshot.getString("Address");
                 proRestoDesc=documentSnapshot.getString("discription");
+                total_rating=documentSnapshot.getString("total_rating");
+                restoRating.setText(total_rating);
                 proRestoType=documentSnapshot.getString("Type");
                 RESTO_NAME.setText(profileRestoName);
-                Resto_Type.setText(proRestoType);
+                Resto_Type.setText(documentSnapshot.getString("Type"));
                 Resto_location.setText(proRestoAddr);
                 Picasso.get().load(proRestoImage).into(Restaurant_image);
+
+
+
+
+
+
+
+            }
+        });
+        currentUid=mAuth.getCurrentUser().getUid();
+
+
+
+
+        DocumentReference reviewReference = mstore.collection("restaurants").document(proUid).collection("reviews").document(currentUid);
+        reviewReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+
+
+                //Picasso.get().load(documentSnapshot.getString("image")).into(circleImageView);
+                if (documentSnapshot.exists()) {
+
+
+                    String ratings = documentSnapshot.getString("rating");
+                    ratingBar.setRating(Float.parseFloat(ratings));
+                    dialog.dismiss();
+                }
+                else{
+                    ratingBar.setRating(0);
+                    dialog.dismiss();
+
+                }
+
 
 
 

@@ -54,6 +54,7 @@ public class Search_fragment extends Fragment {
         args.putString(ARG_PARAM3, param3);
         args.putString(ARG_PARAM4, param4);
         fragment.setArguments(args);
+
         return fragment;
     }
     @Override

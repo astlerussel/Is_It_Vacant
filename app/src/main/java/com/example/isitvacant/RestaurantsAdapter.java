@@ -36,6 +36,7 @@ public class RestaurantsAdapter extends FirestoreRecyclerAdapter<RestaurantsMode
         holder.restoName.setText(model.getName());
         holder.restoAddr.setText(model.getLocation());
         holder.restoType.setText(model.getTypes());
+        holder.restoRating.setText(model.getTotal_rating());
 
         holder.restoDis.setText(model.getDiscription());
 
@@ -56,7 +57,7 @@ public class RestaurantsAdapter extends FirestoreRecyclerAdapter<RestaurantsMode
     class RestaurantsHolder extends RecyclerView.ViewHolder{
 
         TextView restoName,restoType,restoAddr;
-        TextView restoDis;
+        TextView restoDis,restoRating;
         ImageView restoImage;
 
         public RestaurantsHolder(@NonNull View itemView) {
@@ -65,6 +66,7 @@ public class RestaurantsAdapter extends FirestoreRecyclerAdapter<RestaurantsMode
             restoName = itemView.findViewById(R.id.restaurant_title);
             restoDis = itemView.findViewById(R.id.restaurant_description);
             restoImage = itemView.findViewById(R.id.restaurant_image);
+            restoRating = itemView.findViewById(R.id.food_rating_number);
             restoType = itemView.findViewById(R.id.restaurant_type);
             restoAddr = itemView.findViewById(R.id.restaurant_location);
             itemView.setOnClickListener(new View.OnClickListener() {

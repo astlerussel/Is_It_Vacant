@@ -43,12 +43,13 @@ public class MainActivity extends AppCompatActivity {
         openFragments(Home_fragment.newInstance("", "", "",""));
 
 
+
     }
 
     public void openFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
-        transaction.addToBackStack(null);
+        //transaction.addToBackStack(null);
         transaction.commit();
     }
 
@@ -88,8 +89,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //Checking for fragment count on backstack
+
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+
             getSupportFragmentManager().popBackStack();
+
+
+
         } else if (!doubleBackToExitPressedOnce) {
             this.doubleBackToExitPressedOnce = true;
             Toast.makeText(this,"Please click BACK again to exit.", Toast.LENGTH_SHORT).show();
