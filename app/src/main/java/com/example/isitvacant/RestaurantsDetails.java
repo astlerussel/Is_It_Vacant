@@ -2,6 +2,7 @@ package com.example.isitvacant;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -49,7 +50,7 @@ public class RestaurantsDetails extends AppCompatActivity {
     private CollectionReference contactsRef ;
     private ReviewsAdapter adapter;
     FirebaseFirestore mstore;
-    Button submit_rat_bt;
+    Button submit_rat_bt,book_bt;
     FirebaseAuth mAuth;
     EditText reviewText;
     String ratingStr;
@@ -75,6 +76,7 @@ public class RestaurantsDetails extends AppCompatActivity {
         mAuth=FirebaseAuth.getInstance();
         RESTO_NAME = findViewById(R.id.restoName);
         restoRating = findViewById(R.id.restaurant_rating_number);
+        book_bt = findViewById(R.id.Book_now);
 
 
 
@@ -89,6 +91,15 @@ public class RestaurantsDetails extends AppCompatActivity {
         Resto_location.setText(proRestoAddr);
         Glide.with(getApplicationContext()).load(proRestoImage).into(Restaurant_image);
         ratingBar = findViewById(R.id.rating_bar);
+
+        book_bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RestaurantsDetails.this,BookingActivity.class);
+                intent.putExtra("uid",proUid);
+                startActivity(intent);
+            }
+        });
 
 
         DocumentReference documentReferences = mstore.collection("users").document(currentUid);
