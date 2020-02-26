@@ -411,7 +411,7 @@ public class RestaurantsDetails extends AppCompatActivity {
     }
     public void increaseInteger(View view) {
         minteger = minteger + 1;
-        if (minteger>4){
+        if (minteger>10){
             increse_bt.setEnabled(false);
             deacrease_bt.setEnabled(true);
         }
