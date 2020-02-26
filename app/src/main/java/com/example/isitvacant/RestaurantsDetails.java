@@ -470,7 +470,7 @@ public class RestaurantsDetails extends AppCompatActivity {
         }
         else if (minteger<10){
             display(minteger);
-            increse_bt.setEnabled(true);
+
             deacrease_bt.setEnabled(true);
 
         }
@@ -486,7 +486,7 @@ public class RestaurantsDetails extends AppCompatActivity {
         }
         else if(minteger>0){
             display(minteger);
-            deacrease_bt.setEnabled(true);
+
             increse_bt.setEnabled(true);
         }
     }
