@@ -391,6 +391,7 @@ public class RestaurantsDetails extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+
         proUid=getIntent().getStringExtra("uid");
 
         adapter.startListening();
@@ -462,12 +463,15 @@ public class RestaurantsDetails extends AppCompatActivity {
     }
     public void increaseInteger(View view) {
         minteger = minteger + 1;
-        if (minteger>10){
+        if (minteger>=10){
+            display(minteger);
             increse_bt.setEnabled(false);
             deacrease_bt.setEnabled(true);
         }
-        else {
+        else if (minteger<10){
             display(minteger);
+            increse_bt.setEnabled(true);
+            deacrease_bt.setEnabled(true);
 
         }
 
@@ -475,12 +479,15 @@ public class RestaurantsDetails extends AppCompatActivity {
 
     }public void decreaseInteger(View view) {
         minteger = minteger - 1;
-        if (minteger<0){
+        if (minteger<=0){
+            display(minteger);
             deacrease_bt.setEnabled(false);
             increse_bt.setEnabled(true);
         }
-        else {
+        else if(minteger>0){
             display(minteger);
+            deacrease_bt.setEnabled(true);
+            increse_bt.setEnabled(true);
         }
     }
 
