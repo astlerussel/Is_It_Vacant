@@ -2,6 +2,7 @@ package com.example.isitvacant;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -44,6 +45,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.opencensus.internal.Utils;
 
 import static com.example.isitvacant.R.anim.bottom_to_up;
 import static maes.tech.intentanim.CustomIntent.customType;
@@ -149,7 +152,7 @@ public class RestaurantsDetails extends AppCompatActivity {
 
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
-            public void onRatingChanged(RatingBar ratingBar, final float rating, boolean fromUser) {
+            public void onRatingChanged(final RatingBar ratingBar, final float rating, boolean fromUser) {
                 Toast.makeText(RestaurantsDetails.this, ""+rating, Toast.LENGTH_SHORT).show();
 
 
@@ -164,6 +167,41 @@ public class RestaurantsDetails extends AppCompatActivity {
                 dialog.show();
                 dialog.setCanceledOnTouchOutside(true);
 
+                dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+                    @Override
+                    public void onCancel(final DialogInterface dialogs) {
+
+
+                        DocumentReference reviewReference = mstore.collection("restaurants").document(proUid).collection("reviews").document(currentUid);
+                        reviewReference.addSnapshotListener(RestaurantsDetails.this, new EventListener<DocumentSnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+
+
+                                //Picasso.get().load(documentSnapshot.getString("image")).into(circleImageView);
+                                if (documentSnapshot.exists()) {
+
+
+                                    String ratings = documentSnapshot.getString("rating");
+
+                                    ratingBar.setRating(Float.parseFloat(ratings));
+                                    dialog.dismiss();
+
+                                }
+
+
+
+
+
+
+
+
+                            }
+                        });
+
+                    }
+                });
 
 
 
@@ -318,6 +356,9 @@ public class RestaurantsDetails extends AppCompatActivity {
 
 
     }
+
+
+
 
 
 
