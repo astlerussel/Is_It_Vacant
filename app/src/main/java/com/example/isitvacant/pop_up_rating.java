@@ -63,30 +63,9 @@ public class pop_up_rating extends Activity {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
 
-        DocumentReference documentReferences = mstore.collection("users").document(currentUid);
-        documentReferences.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-
-
-                //Picasso.get().load(documentSnapshot.getString("image")).into(circleImageView);
-
-
-                currentUserName=documentSnapshot.getString("name");
-                userProImage = documentSnapshot.getString("image");
 
 
 
-
-
-
-
-
-            }
-        });
-
-
-        ratingStr=getIntent().getStringExtra("rating");
 
 
 

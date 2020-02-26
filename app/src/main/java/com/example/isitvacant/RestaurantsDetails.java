@@ -162,10 +162,17 @@ public class RestaurantsDetails extends AppCompatActivity {
                 ratingBar2 = dialog.findViewById(R.id.rating_bar2);
                 ratingBar2.setRating(ratingBar.getRating());
                 dialog.show();
+                dialog.setCanceledOnTouchOutside(true);
+
+
+
 
                 submit_rat_bt =  dialog.findViewById(R.id.submit_rat);
                 reviewText = dialog.findViewById(R.id.review_text);
                 ratingStr=String.valueOf(rating);
+
+
+
 
 
 
@@ -284,6 +291,9 @@ public class RestaurantsDetails extends AppCompatActivity {
 
 
 
+
+
+
             }
 
 
@@ -292,6 +302,10 @@ public class RestaurantsDetails extends AppCompatActivity {
 
 
         });
+
+
+
+
 
 
 
@@ -388,13 +402,9 @@ public class RestaurantsDetails extends AppCompatActivity {
 
 
                     String ratings = documentSnapshot.getString("rating");
+
                     ratingBar.setRating(Float.parseFloat(ratings));
                     dialog.dismiss();
-                }
-                else{
-                    ratingBar.setRating(0);
-                    dialog.dismiss();
-
                 }
 
 
