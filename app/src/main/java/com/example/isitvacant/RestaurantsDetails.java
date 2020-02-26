@@ -56,16 +56,16 @@ public class RestaurantsDetails extends AppCompatActivity {
     private ReviewsAdapter adapter;
     int minteger = 0;
     FirebaseFirestore mstore;
-    Button submit_rat_bt,book_bt;
+    Button submit_rat_bt,book_bt,increse_bt,deacrease_bt;
     FirebaseAuth mAuth;
     EditText reviewText;
     String ratingStr;
     String currentUid;
-    TextView RESTO_NAME,Resto_Type,Resto_location,restoRating;
+    TextView RESTO_NAME,Resto_Type,Resto_location,restoRating,book_resto_title,book_resto_location;
      String review_text;
-    ImageView Restaurant_image;
+    ImageView Restaurant_image,resto_book_image;
     RatingBar ratingBar,ratingBar2;
-    Activity activity;
+
     Query query;
     String profileRestoName,proUid,total_rating,proRestoImage,proMobile,proRestoGstin,proRestoAddr,proRestoDesc,proRestoType,currentUserName,userProImage;
  Dialog dialog;
@@ -101,12 +101,22 @@ public class RestaurantsDetails extends AppCompatActivity {
         book_bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               /* Intent intent = new Intent(RestaurantsDetails.this,BookingActivity.class);
-                intent.putExtra("uid",proUid);
-                startActivity(intent);*/
+
+
+
+
+
 
                 dialog1 = new BottomSheetDialog(RestaurantsDetails.this,R.style.book_now_pop);
                 dialog1.setContentView(R.layout.book_now);
+                book_resto_location = dialog1.findViewById(R.id.resto_location);
+                resto_book_image = dialog1.findViewById(R.id.restaurant_image);
+                book_resto_title = dialog1.findViewById(R.id.restaurant_title);
+                increse_bt=dialog1.findViewById(R.id.increase);
+                deacrease_bt = dialog1.findViewById(R.id.decrease);
+                book_resto_title.setText(profileRestoName);
+                book_resto_location.setText(proRestoAddr);
+                Glide.with(getApplicationContext()).load(proRestoImage).into(resto_book_image);
                 dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog1.show();
 
@@ -146,6 +156,7 @@ public class RestaurantsDetails extends AppCompatActivity {
 
                 dialog = new Dialog(RestaurantsDetails.this,R.style.book_now_pop);
                 dialog.setContentView(R.layout.activity_pop_up_rating);
+
 
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 ratingBar2 = dialog.findViewById(R.id.rating_bar2);
@@ -400,11 +411,26 @@ public class RestaurantsDetails extends AppCompatActivity {
     }
     public void increaseInteger(View view) {
         minteger = minteger + 1;
-        display(minteger);
+        if (minteger>10){
+            increse_bt.setEnabled(false);
+            deacrease_bt.setEnabled(true);
+        }
+        else {
+            display(minteger);
+
+        }
+
+
 
     }public void decreaseInteger(View view) {
         minteger = minteger - 1;
-        display(minteger);
+        if (minteger<0){
+            deacrease_bt.setEnabled(false);
+            increse_bt.setEnabled(true);
+        }
+        else {
+            display(minteger);
+        }
     }
 
     private void display(int number) {
