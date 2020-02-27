@@ -2,6 +2,7 @@ package com.example.isitvacant;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -44,6 +45,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.opencensus.internal.Utils;
 
 import static com.example.isitvacant.R.anim.bottom_to_up;
 import static maes.tech.intentanim.CustomIntent.customType;
@@ -149,7 +152,7 @@ public class RestaurantsDetails extends AppCompatActivity {
 
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
-            public void onRatingChanged(RatingBar ratingBar, final float rating, boolean fromUser) {
+            public void onRatingChanged(final RatingBar ratingBar, final float rating, boolean fromUser) {
                 Toast.makeText(RestaurantsDetails.this, ""+rating, Toast.LENGTH_SHORT).show();
 
 
@@ -162,10 +165,52 @@ public class RestaurantsDetails extends AppCompatActivity {
                 ratingBar2 = dialog.findViewById(R.id.rating_bar2);
                 ratingBar2.setRating(ratingBar.getRating());
                 dialog.show();
+                dialog.setCanceledOnTouchOutside(true);
+
+                dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+                    @Override
+                    public void onCancel(final DialogInterface dialogs) {
+
+
+                        DocumentReference reviewReference = mstore.collection("restaurants").document(proUid).collection("reviews").document(currentUid);
+                        reviewReference.addSnapshotListener(RestaurantsDetails.this, new EventListener<DocumentSnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+
+
+                                //Picasso.get().load(documentSnapshot.getString("image")).into(circleImageView);
+                                if (documentSnapshot.exists()) {
+
+
+                                    String ratings = documentSnapshot.getString("rating");
+
+                                    ratingBar.setRating(Float.parseFloat(ratings));
+                                    dialog.dismiss();
+
+                                }
+
+
+
+
+
+
+
+
+                            }
+                        });
+
+                    }
+                });
+
+
 
                 submit_rat_bt =  dialog.findViewById(R.id.submit_rat);
                 reviewText = dialog.findViewById(R.id.review_text);
                 ratingStr=String.valueOf(rating);
+
+
+
 
 
 
@@ -284,6 +329,9 @@ public class RestaurantsDetails extends AppCompatActivity {
 
 
 
+
+
+
             }
 
 
@@ -303,7 +351,14 @@ public class RestaurantsDetails extends AppCompatActivity {
 
 
 
+
+
+
+
     }
+
+
+
 
 
 
@@ -335,6 +390,7 @@ public class RestaurantsDetails extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
 
         proUid=getIntent().getStringExtra("uid");
 
@@ -388,13 +444,9 @@ public class RestaurantsDetails extends AppCompatActivity {
 
 
                     String ratings = documentSnapshot.getString("rating");
+
                     ratingBar.setRating(Float.parseFloat(ratings));
                     dialog.dismiss();
-                }
-                else{
-                    ratingBar.setRating(0);
-                    dialog.dismiss();
-
                 }
 
 
@@ -411,12 +463,15 @@ public class RestaurantsDetails extends AppCompatActivity {
     }
     public void increaseInteger(View view) {
         minteger = minteger + 1;
-        if (minteger>10){
+        if (minteger>=10){
+            display(minteger);
             increse_bt.setEnabled(false);
             deacrease_bt.setEnabled(true);
         }
-        else {
+        else if (minteger<10){
             display(minteger);
+
+            deacrease_bt.setEnabled(true);
 
         }
 
@@ -424,12 +479,15 @@ public class RestaurantsDetails extends AppCompatActivity {
 
     }public void decreaseInteger(View view) {
         minteger = minteger - 1;
-        if (minteger<0){
+        if (minteger<=0){
+            display(minteger);
             deacrease_bt.setEnabled(false);
             increse_bt.setEnabled(true);
         }
-        else {
+        else if(minteger>0){
             display(minteger);
+
+            increse_bt.setEnabled(true);
         }
     }
 
