@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Gray shadow. -->
+    <item android:left="0dp" android:top="0dp">
+        <shape
+            android:shape="oval"
+            >
+            <solid android:color="#686868"
+                />
+            <size android:width="100dp"
+                android:height="100dp"/>
+        </shape>
+    </item>
+    <!-- White foreground. -->
+    <item android:bottom="2dp" android:right="3dp">
+        <shape android:shape="oval">
+            <solid android:color="#DD2C00" />
+            <size android:width="120dp"
+                android:height="120dp"/>
+
+        </shape>
+    </item>
+</layer-list>
