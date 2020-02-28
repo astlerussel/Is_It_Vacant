@@ -59,13 +59,22 @@
             android:textSize="13dp"
             android:textStyle="normal"/>
 
+
         </RelativeLayout>
+
+        <com.vivekkaushik.datepicker.DatePickerTimeline
+            android:id="@+id/datePickerTimeline"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+
+            android:layout_marginTop="120dp"
+            />
 
         <TextView
             android:layout_width="90dp"
             android:layout_height="30dp"
 
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="220dp"
             android:textStyle="bold"
             android:text="TIME"
             android:gravity="center"
@@ -73,10 +82,11 @@
             android:textColor="#000"
 
             />
+
         <TextView
             android:layout_width="130dp"
             android:layout_height="20dp"
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="250dp"
             android:text="Choose Your Slot"
             android:layout_marginLeft="20dp"
             />
@@ -86,9 +96,9 @@
                 android:id="@+id/Time_Slots"
                 android:layout_width="80dp"
                 android:layout_height="45dp"
-                android:hint="11:45"
+                android:text="11:45"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="180dp"
+                android:layout_marginTop="280dp"
                 android:background="@drawable/bg_button"
                />
 
@@ -96,7 +106,7 @@
         <TextView
             android:layout_width="180dp"
             android:layout_height="30dp"
-            android:layout_marginTop="225dp"
+            android:layout_marginTop="335dp"
             android:text="How Many People?"
             android:textColor="#000"
             android:layout_marginHorizontal="100dp"
@@ -111,7 +121,7 @@
                 android:id="@+id/decrease"
                 android:layout_width="52dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="290dp"
+                android:layout_marginTop="390dp"
                 android:layout_marginLeft="90dp"
                 android:onClick="decreaseInteger"
                 android:enabled="false"
@@ -126,7 +136,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="165dp"
-                android:layout_marginTop="260dp"
+                android:layout_marginTop="360dp"
                 android:text="0"
                 android:textColor="#000"
                 android:textStyle="bold"
@@ -136,7 +146,7 @@
                 android:id="@+id/increase"
                 android:layout_width="52dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="290dp"
+                android:layout_marginTop="390dp"
                 android:layout_marginLeft="230dp"
                 android:onClick="increaseInteger"
                 android:text="+" />

@@ -40,8 +40,12 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
+import com.vivekkaushik.datepicker.DatePickerTimeline;
+import com.vivekkaushik.datepicker.OnDateSelectedListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,10 +62,13 @@ public class RestaurantsDetails extends AppCompatActivity {
     private CollectionReference contactsRef ;
     private ReviewsAdapter adapter;
     int minteger = 0;
+    static int flag =0;
+    static String time_slot;
     FirebaseFirestore mstore;
-    Button submit_rat_bt,book_bt,increse_bt,deacrease_bt;
+    Button submit_rat_bt,book_bt,increse_bt,deacrease_bt,Book,Time_slot;
     FirebaseAuth mAuth;
     EditText reviewText;
+    String book_date;
     String ratingStr;
     String currentUid;
     TextView RESTO_NAME,Resto_Type,Resto_location,restoRating,book_resto_title,book_resto_location;
@@ -101,9 +108,10 @@ public class RestaurantsDetails extends AppCompatActivity {
         Glide.with(getApplicationContext()).load(proRestoImage).into(Restaurant_image);
         ratingBar = findViewById(R.id.rating_bar);
 
+
         book_bt.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
 
 
 
@@ -117,11 +125,91 @@ public class RestaurantsDetails extends AppCompatActivity {
                 book_resto_title = dialog1.findViewById(R.id.restaurant_title);
                 increse_bt=dialog1.findViewById(R.id.increase);
                 deacrease_bt = dialog1.findViewById(R.id.decrease);
+                Book = dialog1.findViewById(R.id.Book);
+                Time_slot = dialog1.findViewById(R.id.Time_Slots);
                 book_resto_title.setText(profileRestoName);
                 book_resto_location.setText(proRestoAddr);
+
+                DatePickerTimeline datePickerTimeline = dialog1.findViewById(R.id.datePickerTimeline);
+                Date today = new Date(); // Fri Jun 17 14:54:28 PDT 2016
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(today); // don't forget this if date is arbitrary e.g. 01-01-2014
+
+                int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK); // 6
+                int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH); // 17
+                int dayOfYear = cal.get(Calendar.DAY_OF_YEAR); //169
+
+                final int month = cal.get(Calendar.MONTH); // 5
+                int year = cal.get(Calendar.YEAR); // 2016
+
+                datePickerTimeline.setInitialDate(year, month, dayOfMonth);
+                // Set a date Selected Listener
+                datePickerTimeline.setOnDateSelectedListener(new OnDateSelectedListener() {
+                    @Override
+                    public void onDateSelected(int year, int month, int day, int dayOfWeek) {
+                        month=month+1;
+
+                        book_date = day+"/"+month+"/"+year;
+                        Toast.makeText(RestaurantsDetails.this, book_date, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onDisabledDateSelected(int year, int month, int day, int dayOfWeek, boolean isDisabled) {
+                        // Do Something
+                    }
+                });
+
+                 // Disable date
+                //Date[] dates = {Calendar.getInstance().getTime()};
+                //datePickerTimeline.deactivateDates(dates);
+                datePickerTimeline.setDateTextColor(Color.BLACK);
+
+                datePickerTimeline.setDayTextColor(Color.parseColor("#055AC7"));
+                datePickerTimeline.setMonthTextColor(Color.parseColor("#055AC7"));
+
+
+
+
+                Time_slot.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+                        if (flag==0) {
+                            Time_slot.setBackground(getDrawable(R.drawable.bg_button_release));
+                            flag = 1;
+                            time_slot =  Time_slot.getText().toString();
+                            Toast.makeText(RestaurantsDetails.this, Time_slot.getText().toString(), Toast.LENGTH_SHORT).show();
+
+
+                        }
+                        else if (flag==1){
+                            Time_slot.setBackground(getDrawable(R.drawable.bg_button));
+                            flag= 0;
+                        }
+                    }
+                });
+
+                Book.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TextView increaseInteger = (TextView) dialog1.findViewById(
+                                R.id.integer_number);
+                        String no_of_people = increaseInteger.getText().toString();
+                        Intent intent = new Intent(RestaurantsDetails.this,BookingActivity.class);
+                        intent.putExtra("bookDate",book_date);
+                        intent.putExtra("timeSlot",time_slot);
+                        intent.putExtra("no_of_people",no_of_people);
+                        startActivity(intent);
+
+                    }
+                });
                 Glide.with(getApplicationContext()).load(proRestoImage).into(resto_book_image);
                 dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog1.show();
+
+
 
 
             }
