@@ -172,7 +172,7 @@ public class RestaurantsDetails extends AppCompatActivity {
 
                 recyclerView.setLayoutManager(new LinearLayoutManager(RestaurantsDetails.this,LinearLayoutManager.HORIZONTAL,false));
                 recyclerView.setAdapter(Tadapter);
-                Time_slot = recyclerView.findViewById(R.id.Time_Slots);
+
                 Tadapter.startListening();
 
                 datePickerTimeline.setInitialDate(year, month, dayOfMonth);
