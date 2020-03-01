@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/current_reservation_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="225dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="20dp">
+
+        <TextView
+            android:id="@+id/resto_Title"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="Chowks Food Court"
+            android:gravity="left|center"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:textColor="#FF6D00"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            />
+        <TextView
+            android:id="@+id/Username"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="Chiranthan M V"
+            android:gravity="left|center"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:textColor="#000"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="35dp"
+            />
+        <TextView
+            android:id="@+id/Date"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:text="11/09/1998"
+            android:gravity="left|center"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:drawableStart="@drawable/calendar"
+            android:drawablePadding="5dp"
+            android:layout_marginTop="65dp"
+            />
+        <TextView
+            android:id="@+id/Time"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:text="12:06 PM"
+            android:gravity="left|center"
+            android:drawablePadding="5dp"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:drawableStart="@drawable/ic_access_time_black_24dp"
+            android:layout_marginLeft="220dp"
+            android:layout_marginTop="65dp"
+            />
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:text="Guests :"
+            android:gravity="left|center"
+            android:drawablePadding="5dp"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="95dp"
+            />
+        <TextView
+            android:id="@+id/Guests"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="3"
+            android:gravity="left|center"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:layout_marginLeft="72dp"
+            android:layout_marginTop="95dp"
+            />
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:text="Table No :"
+            android:gravity="left|center"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="125dp"
+            />
+        <TextView
+            android:id="@+id/Table_No"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="T1"
+            android:gravity="left|center"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:textColor="#000"
+            android:layout_marginLeft="90dp"
+            android:layout_marginTop="125dp"
+            />
+
+        <TextView
+            android:id="@+id/Location"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="Near Ballabagh, Mangalore"
+            android:gravity="left|center"
+            android:drawableStart="@drawable/ic_location_on_black_24dp"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="155dp"
+            />
+        <Button
+            android:id="@+id/Cancel_button"
+            android:layout_width="130dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="195dp"
+            android:layout_marginLeft="115dp"
+            android:text="Cancel"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            android:textColor="#fff"
+            android:background="@drawable/gradient_style"
+            />
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="295dp"
+            android:src="@drawable/star"
+            />
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</LinearLayout>
