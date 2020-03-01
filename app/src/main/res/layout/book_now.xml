@@ -110,6 +110,7 @@
             />
 
         <TextView
+            android:id="@+id/cs"
             android:layout_width="130dp"
             android:layout_height="20dp"
             android:layout_marginTop="250dp"
@@ -118,16 +119,15 @@
             />
 
 
-            <Button
-                android:id="@+id/Time_Slots"
-                android:layout_width="80dp"
-                android:layout_height="45dp"
-                android:text="11:45"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="280dp"
-                android:background="@drawable/bg_button"
-               />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/time_slot_recycler"
+            android:layout_width="375dp"
+            android:layout_height="59dp"
+            android:layout_below="@id/details"
 
+
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="270dp" />
 
         <TextView
             android:layout_width="180dp"
