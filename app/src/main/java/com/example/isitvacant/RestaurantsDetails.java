@@ -351,11 +351,32 @@ public class RestaurantsDetails extends AppCompatActivity {
                         TextView increaseInteger = (TextView) dialog1.findViewById(
                                 R.id.integer_number);
                         String no_of_people = increaseInteger.getText().toString();
-                        Intent intent = new Intent(RestaurantsDetails.this,BookingActivity.class);
-                        intent.putExtra("bookDate",book_date);
-                        intent.putExtra("timeSlot",time_slot);
-                        intent.putExtra("no_of_people",no_of_people);
-                        startActivity(intent);
+
+
+                        if (no_of_people.equals("0")){
+
+
+
+                            Toast.makeText(RestaurantsDetails.this,"Please select Number of people!!", Toast.LENGTH_SHORT).show();
+
+                        }
+                        else if ( time_slot == null ){
+
+
+                            Toast.makeText(RestaurantsDetails.this, "Please select a Time Slot!!", Toast.LENGTH_SHORT).show();
+
+                        }
+                        else{
+
+
+                            Intent intent = new Intent(RestaurantsDetails.this,BookingActivity.class);
+                            intent.putExtra("bookDate",book_date);
+                            intent.putExtra("timeSlot",time_slot);
+                            intent.putExtra("no_of_people",no_of_people);
+                            startActivity(intent);
+
+                        }
+
 
                     }
                 });
