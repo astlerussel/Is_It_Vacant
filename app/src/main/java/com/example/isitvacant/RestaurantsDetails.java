@@ -159,9 +159,9 @@ public class RestaurantsDetails extends AppCompatActivity {
                 int months = month +1;
 
 
-                String curDate = dayOfMonth+"/"+months+"/"+year;
+                book_date = dayOfMonth+"/"+months+"/"+year;
 
-                Tquery = timeRef.whereEqualTo("date",curDate).orderBy("time_slot");
+                Tquery = timeRef.whereEqualTo("date",book_date);
                 FirestoreRecyclerOptions<ModelTimeSlot> options = new FirestoreRecyclerOptions.Builder<ModelTimeSlot>()
                         .setQuery(Tquery, ModelTimeSlot.class)
                         .build();
@@ -172,6 +172,21 @@ public class RestaurantsDetails extends AppCompatActivity {
 
                 recyclerView.setLayoutManager(new LinearLayoutManager(RestaurantsDetails.this,LinearLayoutManager.HORIZONTAL,false));
                 recyclerView.setAdapter(Tadapter);
+
+                Tadapter.startListening();
+
+
+                Tquery = timeRef.whereEqualTo("date",book_date).orderBy("time_slot");
+                FirestoreRecyclerOptions<ModelTimeSlot> optionsss = new FirestoreRecyclerOptions.Builder<ModelTimeSlot>()
+                        .setQuery(Tquery, ModelTimeSlot.class)
+                        .build();
+
+                Tadapter = new TimeSlotAdapter(optionsss);
+
+                RecyclerView recyclerView2 = dialog1.findViewById(R.id.time_slot_recycler);
+
+                recyclerView2.setLayoutManager(new LinearLayoutManager(RestaurantsDetails.this,LinearLayoutManager.HORIZONTAL,false));
+                recyclerView2.setAdapter(Tadapter);
 
                 Tadapter.startListening();
 
@@ -189,7 +204,8 @@ public class RestaurantsDetails extends AppCompatActivity {
 
 
 
-                        Tquery = timeRef.whereEqualTo("date",book_date).orderBy("time_slot");
+                        Tquery = timeRef.whereEqualTo("date",book_date);
+
                         FirestoreRecyclerOptions<ModelTimeSlot> options = new FirestoreRecyclerOptions.Builder<ModelTimeSlot>()
                                 .setQuery(Tquery, ModelTimeSlot.class)
                                 .build();
@@ -200,6 +216,22 @@ public class RestaurantsDetails extends AppCompatActivity {
 
                         recyclerView.setLayoutManager(new LinearLayoutManager(RestaurantsDetails.this,LinearLayoutManager.HORIZONTAL,false));
                         recyclerView.setAdapter(Tadapter);
+                        Tadapter.startListening();
+
+
+
+                        Tquery = timeRef.whereEqualTo("date",book_date).orderBy("time_slot");
+
+                        FirestoreRecyclerOptions<ModelTimeSlot> optionss = new FirestoreRecyclerOptions.Builder<ModelTimeSlot>()
+                                .setQuery(Tquery, ModelTimeSlot.class)
+                                .build();
+
+                        Tadapter = new TimeSlotAdapter(optionss);
+
+                        RecyclerView recyclerView1 = dialog1.findViewById(R.id.time_slot_recycler);
+
+                        recyclerView1.setLayoutManager(new LinearLayoutManager(RestaurantsDetails.this,LinearLayoutManager.HORIZONTAL,false));
+                        recyclerView1.setAdapter(Tadapter);
                         Tadapter.startListening();
                         Tadapter.setOnItemClickListener(new TimeSlotAdapter.OnItemClickListener() {
                             @Override
