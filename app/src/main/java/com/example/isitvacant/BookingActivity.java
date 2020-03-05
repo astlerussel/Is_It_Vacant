@@ -1,14 +1,20 @@
 package com.example.isitvacant;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,10 +28,11 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
 
     ViewGroup layout;
     LinearLayout payinglayout;
-    TextView pay;
+    TextView Continue;
     ArrayList tableids = new ArrayList();
     ArrayList tableids1 = new ArrayList();
-
+    Dialog dialog;
+    CardView Yes,No;
     String seats = "_________/"
             + "_________/"
             + "--AA__AA_/"
@@ -67,7 +74,36 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
 
         layout = findViewById(R.id.layoutSeat);
         payinglayout = findViewById(R.id.paying_layout);
-        pay = findViewById(R.id.pay_ruppes);
+         Continue= findViewById(R.id.Continue);
+         Continue.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 dialog = new Dialog(BookingActivity.this,R.style.book_now_pop);
+                 WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
+                 wmlp.gravity = Gravity.TOP;
+                 wmlp.y=110;
+
+                 dialog.setContentView(R.layout.continue_cardview);
+                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                 dialog.show();
+                 dialog.setCanceledOnTouchOutside(true);
+                 Yes = dialog.findViewById(R.id.Yes);
+                 No = dialog.findViewById(R.id.No);
+                 Yes.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+                         startActivity(new Intent(getApplicationContext(),FoodOdering.class));
+                     }
+                 });
+                 No.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+                         startActivity(new Intent(getApplicationContext(),booking_summary.class));
+                     }
+                 });
+             }
+         });
 
         seats = "/" + seats;
 
@@ -93,14 +129,6 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
 
 
 
-        pay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-
-            }
-        });
 
 
 

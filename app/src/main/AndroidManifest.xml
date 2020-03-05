@@ -12,10 +12,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BookingActivity"></activity>
+        <activity android:name=".Dinner_fragment"></activity>
+        <activity android:name=".Lunch_fragment" />
+        <activity android:name=".Breakfast_fragment" />
+        <activity android:name=".FoodOdering" />
+        <activity android:name=".booking_summary" />
+        <activity android:name=".current_onclick_cardview" />
+        <activity android:name=".BookingActivity" />
         <activity
             android:name=".pop_up_rating"
-            android:theme="@style/AppTheme.PopMe"></activity>
+            android:theme="@style/AppTheme.PopMe" />
         <activity android:name=".RestaurantsDetails" />
         <activity android:name=".setting" />
         <activity android:name=".edit_profile" />
@@ -35,7 +41,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"

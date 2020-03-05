@@ -27,30 +27,18 @@
         android:visibility="invisible"
        >
     <TextView
-        android:id="@+id/Pay"
+        android:id="@+id/Continue"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:background="#0091EA"
-        android:text="Pay Rs"
+        android:text="Continue"
         android:textColor="#fff"
         android:textStyle="bold"
         android:textSize="20dp"
         android:textAlignment="center"
         android:gravity="center"
         />
-        <TextView
-            android:id="@+id/pay_ruppes"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-           android:layout_marginTop="11dp"
-            android:layout_marginLeft="-145dp"
-            android:text="25"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:textColor="#fff"
-            />
+
     </LinearLayout>
 
 </RelativeLayout>

@@ -122,18 +122,29 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="155dp"
             />
-        <Button
-            android:id="@+id/Cancel_button"
-            android:layout_width="130dp"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:layout_marginTop="195dp"
-            android:layout_marginLeft="115dp"
-            android:text="Cancel"
-            android:textSize="14dp"
+            android:text="Payment :"
+            android:gravity="left|center"
+            android:textSize="16dp"
             android:textStyle="bold"
-            android:textColor="#fff"
-            android:background="@drawable/gradient_style"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="185dp"
             />
+        <TextView
+            android:id="@+id/payment"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="25"
+            android:gravity="left|center"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginLeft="85dp"
+            android:layout_marginTop="185dp"
+            />
+
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
