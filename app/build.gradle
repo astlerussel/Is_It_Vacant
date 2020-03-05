@@ -40,7 +40,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
     implementation 'com.github.hajiyevelnur92:intentanimation:1.0'
-
+    implementation 'com.cepheuen.elegant-number-button:lib:1.0.2'
     implementation 'com.google.firebase:firebase-storage:19.1.0'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

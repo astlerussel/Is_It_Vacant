@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 
@@ -17,7 +18,7 @@ import androidx.fragment.app.Fragment;
  */
 public class CurrentReservationFreagment extends Fragment {
 
-
+     CardView currentReservation;
     private View contactsFreagmentView;
 
 
@@ -34,7 +35,14 @@ public class CurrentReservationFreagment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        contactsFreagmentView = inflater.inflate(R.layout.fragment_current, container, false);
+        View view = inflater.inflate(R.layout.fragment_current, container, false);
+        currentReservation = view.findViewById(R.id.current_reservation_cardview);
+        currentReservation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(),current_onclick_cardview.class));
+            }
+        });
 
 
 
@@ -47,9 +55,7 @@ public class CurrentReservationFreagment extends Fragment {
 
 
 
-
-
-        return contactsFreagmentView;
+        return view;
     }
 
 
