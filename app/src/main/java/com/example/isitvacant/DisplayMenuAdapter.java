@@ -16,7 +16,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
 
-public class MenuAdapter extends FirestoreRecyclerAdapter<ModelMenu, MenuAdapter.MenuHolder> {
+public class DisplayMenuAdapter extends FirestoreRecyclerAdapter<ModelDisplayMenu, DisplayMenuAdapter.DisplayMenuHolder> {
     private OnItemClickListener listener;
 
     /**
@@ -25,12 +25,12 @@ public class MenuAdapter extends FirestoreRecyclerAdapter<ModelMenu, MenuAdapter
      *
      * @param options
      */
-    public MenuAdapter(@NonNull FirestoreRecyclerOptions<ModelMenu> options) {
+    public DisplayMenuAdapter(@NonNull FirestoreRecyclerOptions<ModelDisplayMenu> options) {
         super(options);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull MenuHolder holder, int position, @NonNull ModelMenu model) {
+    protected void onBindViewHolder(@NonNull DisplayMenuHolder holder, int position, @NonNull ModelDisplayMenu model) {
 
         holder.cost.setText(model.getCost());
         holder.Name.setText(model.getName());
@@ -47,51 +47,27 @@ public class MenuAdapter extends FirestoreRecyclerAdapter<ModelMenu, MenuAdapter
 
     @NonNull
     @Override
-    public MenuHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DisplayMenuHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.food_items, parent, false);
-        return new MenuHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_card, parent, false);
+        return new DisplayMenuHolder(view);
     }
 
-    class MenuHolder extends RecyclerView.ViewHolder{
+    class DisplayMenuHolder extends RecyclerView.ViewHolder{
 
-        ElegantNumberButton elegantNumberButton;
-       Button Add;
+
         TextView Name,cost,type;
 
         ImageView menuImage;
 
-        public MenuHolder(@NonNull View itemView) {
+        public DisplayMenuHolder(@NonNull View itemView) {
             super(itemView);
-            Name=itemView.findViewById(R.id.food_title);
+            Name=itemView.findViewById(R.id.Food_name);
             cost=itemView.findViewById(R.id.food_costs);
-            type= itemView.findViewById(R.id.food_type);
-            menuImage = itemView.findViewById(R.id.food_image);
-
-            elegantNumberButton = itemView.findViewById(R.id.elegantNumber);
-            Add = itemView.findViewById(R.id.add_food);
-
-            Add.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Add.setVisibility(View.INVISIBLE);
-                    elegantNumberButton.setVisibility(View.VISIBLE);
-                    elegantNumberButton.setNumber("1");
-                    elegantNumberButton.setOnValueChangeListener(new ElegantNumberButton.OnValueChangeListener() {
-                        @Override
-                        public void onValueChange(ElegantNumberButton view, int oldValue, int newValue) {
-                            if(newValue == 0)
-                            {
-                                Add.setVisibility(View.VISIBLE);
-                                elegantNumberButton.setVisibility(View.INVISIBLE);
-                            }
-                        }
-                    });
+            type= itemView.findViewById(R.id.Food_type);
+            menuImage = itemView.findViewById(R.id.menu_image);
 
 
-                }
-            });
 
 
             itemView.setOnClickListener(new View.OnClickListener() {

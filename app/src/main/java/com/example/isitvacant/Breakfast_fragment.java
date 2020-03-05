@@ -27,8 +27,8 @@ public class Breakfast_fragment extends Fragment {
 
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private  String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-    private CollectionReference menuRef = db.collection("/restaurants/"+uid+"/menu");
+    private  String uid;
+    private CollectionReference menuRef;
     private MenuAdapter adapter;
     Query query;
 
@@ -54,9 +54,12 @@ public class Breakfast_fragment extends Fragment {
         groupsFreagmentView = inflater.inflate(R.layout.activity_breakfast_fragment, container, false);
         breakfastMenuRecycler = (RecyclerView) groupsFreagmentView.findViewById(R.id.breakfast_recycler);
         breakfastMenuRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        uid = getActivity().getIntent().getStringExtra("restoUid");
+        menuRef = db.collection("/restaurants/"+uid+"/menu");
 
         query = menuRef.whereEqualTo("type","BreakFast");
         setUpRecyclerView(query);
+
 
 
 
