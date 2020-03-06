@@ -93,7 +93,11 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                  Yes.setOnClickListener(new View.OnClickListener() {
                      @Override
                      public void onClick(View v) {
-                         startActivity(new Intent(getApplicationContext(),FoodOdering.class));
+                         Intent intent = new Intent(getApplicationContext(),FoodOdering.class);
+                         intent.putExtra("restoUid",getIntent().getStringExtra("restoUid"));
+
+
+                         startActivity(intent);
                      }
                  });
                  No.setOnClickListener(new View.OnClickListener() {

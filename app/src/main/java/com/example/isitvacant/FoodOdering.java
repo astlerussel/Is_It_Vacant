@@ -43,5 +43,11 @@ public class FoodOdering extends AppCompatActivity {
         mTabLayout.setupWithViewPager(mViewPager);
 
 
+
+
     }
 }
+
+
+
+

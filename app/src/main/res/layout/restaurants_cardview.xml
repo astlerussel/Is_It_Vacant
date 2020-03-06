@@ -19,7 +19,7 @@
             app:cardCornerRadius="20dp">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/restaurant_image"
+            android:id="@+id/menu_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/couples"

@@ -14,8 +14,6 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class RestaurantsAdapter extends FirestoreRecyclerAdapter<RestaurantsModel, RestaurantsAdapter.RestaurantsHolder> {
     private OnItemClickListener listener;
 
@@ -65,7 +63,7 @@ public class RestaurantsAdapter extends FirestoreRecyclerAdapter<RestaurantsMode
 
             restoName = itemView.findViewById(R.id.restaurant_title);
             restoDis = itemView.findViewById(R.id.restaurant_description);
-            restoImage = itemView.findViewById(R.id.restaurant_image);
+            restoImage = itemView.findViewById(R.id.menu_image);
             restoRating = itemView.findViewById(R.id.food_rating_number);
             restoType = itemView.findViewById(R.id.restaurant_type);
             restoAddr = itemView.findViewById(R.id.restaurant_location);

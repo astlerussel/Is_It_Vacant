@@ -1,26 +1,26 @@
 package com.example.isitvacant;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,22 +50,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.opencensus.internal.Utils;
-
-import static com.example.isitvacant.R.anim.bottom_to_up;
-import static maes.tech.intentanim.CustomIntent.customType;
-
 public class RestaurantsDetails extends AppCompatActivity {
     private RecyclerView reviewsRecyclerList;
+    private RecyclerView menuRecyclerList;
 
 
     private RecyclerView timeSlotRecyclerList;
-    private CollectionReference timeRef;
+    private RecyclerView menu2Recycler;
+    private CollectionReference timeRef,menuRef;
 
 
 
     private TimeSlotAdapter Tadapter;
-    Query Tquery;
+    private DisplayMenuAdapter menuAdapter;
+    Query Tquery,menuQuery,menu2Query;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference contactsRef ;
@@ -90,6 +88,9 @@ public class RestaurantsDetails extends AppCompatActivity {
     String profileRestoName,proUid,total_rating,proRestoImage,proMobile,proRestoGstin,proRestoAddr,proRestoDesc,proRestoType,currentUserName,userProImage;
  Dialog dialog;
  BottomSheetDialog dialog1;
+    private static String types = "BreakFast";
+    private DisplayMenuAdapter menu2Adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +99,12 @@ public class RestaurantsDetails extends AppCompatActivity {
 
         reviewsRecyclerList = (RecyclerView) findViewById(R.id.reviews_recycler_list);
         reviewsRecyclerList.setLayoutManager(new LinearLayoutManager(this));
+
+        menuRecyclerList = (RecyclerView) findViewById(R.id.breakfast_menu_recycler);
+        menuRecyclerList.setLayoutManager(new LinearLayoutManager(this));
+        menu2Recycler = (RecyclerView) findViewById(R.id.lunch_menu_recycler);
+        menu2Recycler.setLayoutManager(new LinearLayoutManager(this));
+
 
         mstore=FirebaseFirestore.getInstance();
         mAuth=FirebaseAuth.getInstance();
@@ -114,11 +121,50 @@ public class RestaurantsDetails extends AppCompatActivity {
         proUid=getIntent().getStringExtra("uid");
         contactsRef = db.collection("/restaurants/"+proUid+"/reviews");
     timeRef = db.collection("/restaurants/"+proUid+"/time_slots");
+        menuRef = db.collection("/restaurants/"+proUid+"/menu");
+        menuQuery = menuRef;
+
+        Spinner spinner2 = (Spinner) findViewById(R.id.type_spinner);
+// Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this,
+                R.array.dish_type, android.R.layout.simple_spinner_item);
+// Specify the layout to use when the list of choices appears
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+// Apply the adapter to the spinner
+        spinner2.setAdapter(adapter2);
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                types= (String) adapterView.getItemAtPosition(i);
+                menu2Query = menuRef.whereEqualTo("type",types);
+                setUpMenu2RecyclerView(menu2Query);
+                menu2Adapter.startListening();
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        menu2Query = menuRef.whereEqualTo("type",types);
+        setUpMenu2RecyclerView(menu2Query);
+
+
+
+
+
+
+
 
         setUpRecyclerView();
         Resto_location.setText(proRestoAddr);
         Glide.with(getApplicationContext()).load(proRestoImage).into(Restaurant_image);
         ratingBar = findViewById(R.id.rating_bar);
+        setUpMenuRecyclerView(menuQuery);
+
 
 
         book_bt.setOnClickListener(new View.OnClickListener() {
@@ -135,7 +181,7 @@ public class RestaurantsDetails extends AppCompatActivity {
                 dialog1 = new BottomSheetDialog(RestaurantsDetails.this,R.style.book_now_pop);
                 dialog1.setContentView(R.layout.book_now);
                 book_resto_location = dialog1.findViewById(R.id.resto_location);
-                resto_book_image = dialog1.findViewById(R.id.restaurant_image);
+                resto_book_image = dialog1.findViewById(R.id.menu_image);
                 book_resto_title = dialog1.findViewById(R.id.restaurant_title);
                 increse_bt=dialog1.findViewById(R.id.increase);
                 deacrease_bt = dialog1.findViewById(R.id.decrease);
@@ -373,6 +419,7 @@ public class RestaurantsDetails extends AppCompatActivity {
                             intent.putExtra("bookDate",book_date);
                             intent.putExtra("timeSlot",time_slot);
                             intent.putExtra("no_of_people",no_of_people);
+                            intent.putExtra("restoUid",proUid);
                             startActivity(intent);
 
                         }
@@ -620,9 +667,65 @@ public class RestaurantsDetails extends AppCompatActivity {
 
     }
 
+    private void setUpMenu2RecyclerView(Query query) {
 
 
 
+
+
+
+
+
+
+
+
+        FirestoreRecyclerOptions<ModelDisplayMenu> options = new FirestoreRecyclerOptions.Builder<ModelDisplayMenu>()
+                .setQuery(query, ModelDisplayMenu.class)
+                .build();
+
+        menu2Adapter = new DisplayMenuAdapter(options);
+
+        RecyclerView recyclerView = findViewById(R.id.lunch_menu_recycler);
+
+
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        recyclerView.setAdapter(menu2Adapter);
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
+    }
+
+
+
+
+
+
+
+    private void setUpMenuRecyclerView(Query query) {
+
+
+
+
+
+
+
+
+
+
+
+        FirestoreRecyclerOptions<ModelDisplayMenu> options = new FirestoreRecyclerOptions.Builder<ModelDisplayMenu>()
+                .setQuery(query, ModelDisplayMenu.class)
+                .build();
+
+        menuAdapter = new DisplayMenuAdapter(options);
+
+        RecyclerView recyclerView = findViewById(R.id.breakfast_menu_recycler);
+
+
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        recyclerView.setAdapter(menuAdapter);
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
+    }
 
 
 
@@ -645,10 +748,10 @@ public class RestaurantsDetails extends AppCompatActivity {
         adapter = new ReviewsAdapter(options);
 
         RecyclerView recyclerView = findViewById(R.id.reviews_recycler_list);
-        recyclerView.setHasFixedSize(false);
-        recyclerView.setNestedScrollingEnabled(false);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
     }
 
     @Override
@@ -658,8 +761,12 @@ public class RestaurantsDetails extends AppCompatActivity {
 
         proUid=getIntent().getStringExtra("uid");
 
-        adapter.startListening();
 
+
+
+        adapter.startListening();
+        menuAdapter.startListening();
+menu2Adapter.startListening();
 
 
         DocumentReference documentReference = mstore.collection("restaurants").document(proUid);

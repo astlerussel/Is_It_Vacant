@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/food_image"
+        android:layout_width="115dp"
+        android:layout_height="115dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="12dp"
+        android:elevation="5dp"
+        app:cardCornerRadius="20dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/menu_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/couples" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/Food_name"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="10dp"
+        android:hint="Food Name"
+        android:textStyle="bold"
+        android:gravity="center|left"
+        android:textSize="18dp"
+        android:layout_below="@+id/top_dish_text"
+        android:layout_toRightOf="@id/food_image"/>
+    <TextView
+        android:id="@+id/Food_type"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="10dp"
+        android:hint="In Starters"
+        android:gravity="center|left"
+        android:textSize="15dp"
+        android:layout_below="@+id/Food_name"
+        android:layout_toRightOf="@id/food_image"/>
+    <TextView
+        android:id="@+id/food_costs"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="10dp"
+        android:hint="Food cost"
+        android:gravity="center|left"
+        android:textSize="15dp"
+        android:layout_below="@+id/Food_type"
+        android:layout_toRightOf="@id/food_image"/>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/food_rating"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/top_dish_text"
+        app:cardBackgroundColor="#0091EA"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="18dp"
+        android:layout_marginRight="10dp"
+        android:elevation="20dp">
+        <TextView
+            android:id="@+id/food_rating_number"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="number"
+            android:text="4.2"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:gravity="center"/>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

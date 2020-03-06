@@ -2,6 +2,8 @@ package com.example.isitvacant;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,13 +12,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 public class Breakfast_fragment extends Fragment {
 
 
+
     private View groupsFreagmentView;
-    ElegantNumberButton elegantNumberButton;
-    Button Add;
+    private RecyclerView breakfastMenuRecycler;
+
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private  String uid;
+    private CollectionReference menuRef;
+    private MenuAdapter adapter;
+    Query query;
 
 
 
@@ -38,30 +52,14 @@ public class Breakfast_fragment extends Fragment {
 
         // Inflate the layout for this fragment
         groupsFreagmentView = inflater.inflate(R.layout.activity_breakfast_fragment, container, false);
-        elegantNumberButton = groupsFreagmentView.findViewById(R.id.elegantNumber);
-        Add = groupsFreagmentView.findViewById(R.id.add_food);
+        breakfastMenuRecycler = (RecyclerView) groupsFreagmentView.findViewById(R.id.breakfast_recycler);
+        breakfastMenuRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        uid = getActivity().getIntent().getStringExtra("restoUid");
+        menuRef = db.collection("/restaurants/"+uid+"/menu");
 
-        Add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        query = menuRef.whereEqualTo("type","BreakFast");
+        setUpRecyclerView(query);
 
-                Add.setVisibility(View.INVISIBLE);
-                elegantNumberButton.setVisibility(View.VISIBLE);
-                elegantNumberButton.setNumber("1");
-                elegantNumberButton.setOnValueChangeListener(new ElegantNumberButton.OnValueChangeListener() {
-                    @Override
-                    public void onValueChange(ElegantNumberButton view, int oldValue, int newValue) {
-                        if(newValue == 0)
-                        {
-                            Add.setVisibility(View.VISIBLE);
-                            elegantNumberButton.setVisibility(View.INVISIBLE);
-                        }
-                    }
-                });
-
-
-            }
-        });
 
 
 
@@ -73,7 +71,42 @@ public class Breakfast_fragment extends Fragment {
         return groupsFreagmentView;
     }
 
+    private void setUpRecyclerView(Query query) {
+
+
+
+
+
+
+
+        FirestoreRecyclerOptions<ModelMenu> options = new FirestoreRecyclerOptions.Builder<ModelMenu>()
+                .setQuery(query, ModelMenu.class)
+                .build();
+
+        adapter = new MenuAdapter(options);
+
+        RecyclerView recyclerView = groupsFreagmentView.findViewById(R.id.breakfast_recycler);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+
+
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null){
+            adapter.startListening();
+
+        }
+
+    }
+
 
 
 
 }
+
