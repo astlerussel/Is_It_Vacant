@@ -41,7 +41,8 @@
 
         ></androidx.viewpager.widget.ViewPager>
 
-
+    <include
+        layout="@layout/reserve_food"/>
 
 
 </RelativeLayout>
