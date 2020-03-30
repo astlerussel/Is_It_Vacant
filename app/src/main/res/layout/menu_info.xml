@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="400dp"
+        android:text="Menu Info"
+        android:textColor="#0091EA"
+        android:layout_marginLeft="10dp"
+        android:textStyle="bold"
+        android:textSize="22dp"
+        android:gravity="left|center"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="430dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="5dp"
+
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:text="Items"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="left|center"
+            />
+        <include
+            layout="@layout/menu_food_items"
+            />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="60dp"
+            android:background="#60000000"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginTop="65dp"
+            android:text="Grand Total"
+            android:layout_marginLeft="20dp"
+            android:textSize="14dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:id="@+id/total_no_of_items"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginTop="65dp"
+            android:text="2"
+            android:layout_marginLeft="300dp"
+            android:textSize="14dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            />
+
+
+
+
+
+
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>
