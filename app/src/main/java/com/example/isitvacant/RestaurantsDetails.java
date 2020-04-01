@@ -76,7 +76,7 @@ public class RestaurantsDetails extends AppCompatActivity {
     Button submit_rat_bt,book_bt,increse_bt,deacrease_bt,Book;
     FirebaseAuth mAuth;
     EditText reviewText;
-    String book_date;
+    String book_date,book_date2;
     String ratingStr;
     String currentUid;
     TextView RESTO_NAME,Resto_Type,Resto_location,restoRating,book_resto_title,book_resto_location,Time_slot;
@@ -206,6 +206,7 @@ public class RestaurantsDetails extends AppCompatActivity {
 
 
                 book_date = dayOfMonth+"/"+months+"/"+year;
+                book_date2 = dayOfMonth+"-"+months+"-"+year;
 
                 Tquery = timeRef.whereEqualTo("date",book_date);
                 FirestoreRecyclerOptions<ModelTimeSlot> options = new FirestoreRecyclerOptions.Builder<ModelTimeSlot>()
@@ -246,7 +247,7 @@ public class RestaurantsDetails extends AppCompatActivity {
 
 
                         book_date = day+"/"+month+"/"+year;
-                        Toast.makeText(RestaurantsDetails.this, book_date, Toast.LENGTH_SHORT).show();
+                        book_date2 = day+"-"+month+"-"+year;
 
 
 
@@ -365,7 +366,7 @@ public class RestaurantsDetails extends AppCompatActivity {
 
 
                                 time_slot = documentSnapshot.getString("time_slot");
-                                Toast.makeText(RestaurantsDetails.this, time_slot, Toast.LENGTH_SHORT).show();
+
 
 
 
@@ -416,7 +417,7 @@ public class RestaurantsDetails extends AppCompatActivity {
 
 
                             Intent intent = new Intent(RestaurantsDetails.this,BookingActivity.class);
-                            intent.putExtra("bookDate",book_date);
+                            intent.putExtra("bookDate",book_date2);
                             intent.putExtra("timeSlot",time_slot);
                             intent.putExtra("no_of_people",no_of_people);
                             intent.putExtra("restoUid",proUid);

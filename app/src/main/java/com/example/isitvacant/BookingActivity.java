@@ -1,5 +1,6 @@
 package com.example.isitvacant;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -19,14 +20,24 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import io.opencensus.internal.StringUtils;
 
 import static androidx.constraintlayout.solver.widgets.ConstraintTableLayout.ALIGN_CENTER;
 
 public class BookingActivity extends AppCompatActivity implements View.OnClickListener {
 
     ViewGroup layout;
+    static int totalCount=0;
     LinearLayout payinglayout;
     TextView Continue;
     ArrayList tableids = new ArrayList();
@@ -75,6 +86,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
         layout = findViewById(R.id.layoutSeat);
         payinglayout = findViewById(R.id.paying_layout);
          Continue= findViewById(R.id.Continue);
+        no_of_people = getIntent().getStringExtra("no_of_people");
          Continue.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
@@ -93,8 +105,23 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                  Yes.setOnClickListener(new View.OnClickListener() {
                      @Override
                      public void onClick(View v) {
+                         String uid = FirebaseAuth.getInstance().getUid();
+                         bookDate = getIntent().getStringExtra("bookDate");
+                         timeSlot = getIntent().getStringExtra("timeSlot");
+                         no_of_people = getIntent().getStringExtra("no_of_people");
+                         uid = uid.substring(0,8);
+                         timeSlot = timeSlot.substring(0,3)+timeSlot.substring(4,6)+timeSlot.substring(7,9);
+                         String invoiceID = "U"+ uid+"D"+bookDate+"T"+timeSlot+"P"+no_of_people+"FOY";
+
+
+
                          Intent intent = new Intent(getApplicationContext(),FoodOdering.class);
                          intent.putExtra("restoUid",getIntent().getStringExtra("restoUid"));
+                         intent.putExtra("invoiceID",invoiceID);
+                         intent.putExtra("tableIDlist",tableids1);
+                         intent.putExtra("bookDate",bookDate);
+                         intent.putExtra("timeSlot",timeSlot);
+                         intent.putExtra("no_of_people",no_of_people);
 
 
                          startActivity(intent);
@@ -103,7 +130,24 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                  No.setOnClickListener(new View.OnClickListener() {
                      @Override
                      public void onClick(View v) {
-                         startActivity(new Intent(getApplicationContext(),booking_summary.class));
+                         String uid = FirebaseAuth.getInstance().getUid();
+                         bookDate = getIntent().getStringExtra("bookDate");
+                         timeSlot = getIntent().getStringExtra("timeSlot");
+                         no_of_people = getIntent().getStringExtra("no_of_people");
+                         uid = uid.substring(0,8);
+                         timeSlot = timeSlot.substring(0,3)+timeSlot.substring(4,6)+timeSlot.substring(7,9);
+                         String invoiceID = "U"+ uid+"D"+bookDate+"T"+timeSlot+"P"+no_of_people+"FON";
+                         Intent intent = new Intent(getApplicationContext(),booking_summary.class);
+                         intent.putExtra("restoUid",getIntent().getStringExtra("restoUid"));
+                         intent.putExtra("invoiceID",invoiceID);
+                         intent.putExtra("tableIDlist",tableids1);
+                         intent.putExtra("bookDate",bookDate);
+                         intent.putExtra("timeSlot",timeSlot);
+                         intent.putExtra("no_of_people",no_of_people);
+
+
+                         startActivity(intent);
+
                      }
                  });
              }
@@ -121,9 +165,6 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
         layout.addView(layoutSeat);
         Toast.makeText(BookingActivity.this, getIntent().getStringExtra("bookDate")+"  "+getIntent().getStringExtra("timeSlot")+"  "+getIntent().getStringExtra("no_of_people"), Toast.LENGTH_SHORT).show();
 
-        bookDate = getIntent().getStringExtra("bookDate");
-        timeSlot = getIntent().getStringExtra("timeSlot");
-        no_of_people = getIntent().getStringExtra("no_of_people");
 
         LinearLayout layout = null;
 
@@ -155,7 +196,9 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                 view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
                 layout.addView(view);
                 seatViewList.add(view);
-                view.setOnClickListener(this);
+
+                    view.setOnClickListener(this);
+
             } else if (seats.charAt(index) == 'A') {
                 TextView view = new TextView(this);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(seatSize, seatSize);
@@ -211,7 +254,10 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                 view.setTextColor(Color.BLACK);
                 layout.addView(view);
                 view.setTag(STATUS_AVAILABLE);
-                view.setOnClickListener(this);
+
+                    view.setOnClickListener(this);
+
+
             } else if (seats.charAt(index) == '-') {
                 TextView view = new TextView(this);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(25, 25);
@@ -226,6 +272,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
+
         if ((int) view.getTag() == STATUS_AVAILABLE) {
             if (selectedIds.contains(view.getId() + ",")) {
                 selectedIds = selectedIds.replace(+view.getId() + ",", "");
@@ -233,8 +280,10 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                     if (tableids.get(i).equals(view.getId())){
 
                         tableids.remove(i);
+                        totalCount = totalCount-4;
                         tableids1.remove(i);
-                        Toast.makeText(this, ""+tableids1, Toast.LENGTH_SHORT).show();
+                        //to be removed
+                        Toast.makeText(this, ""+tableids1+" "+totalCount, Toast.LENGTH_SHORT).show();
 
 
                     }
@@ -242,46 +291,30 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
 
                 view.setBackgroundResource(R.drawable.table);
             } else {
-                selectedIds = selectedIds + view.getId() + ",";
-                view.setBackgroundResource(R.drawable.table_resrved);
-                //Toast.makeText(this, "T"+view.getId(), Toast.LENGTH_SHORT).show();
-                tableId = view.getId();
+                if (totalCount < Integer.parseInt(no_of_people)) {
+
+
+                    selectedIds = selectedIds + view.getId() + ",";
+                    view.setBackgroundResource(R.drawable.table_resrved);
+
+                    tableId = view.getId();
+
+
+                    tableids.add(tableId);
 
 
 
-
-
-
-                            tableids.add(tableId);
-                           // Toast.makeText(this, ""+tableids, Toast.LENGTH_SHORT).show();
-
-
-
-
-                    String tableId1 = "T"+tableId;
+                    String tableId1 = "T" + tableId;
+                    totalCount = totalCount + 4;
                     tableids1.add(tableId1);
-                    Toast.makeText(BookingActivity.this, ""+tableids1, Toast.LENGTH_SHORT).show();
+                    //to be removed
+                    Toast.makeText(BookingActivity.this, "" + tableids1 + " " + totalCount, Toast.LENGTH_SHORT).show();
 
 
+                    payinglayout.setVisibility(view.VISIBLE);
 
 
-
-
-
-
-
-
-
-
-
-                payinglayout.setVisibility(view.VISIBLE);
-
-
-
-
-
-
-
+                }
             }
         } else if ((int) view.getTag() == STATUS_BOOKED) {
             Toast.makeText(this, "Seat " + view.getId() + " is Booked", Toast.LENGTH_SHORT).show();

@@ -28,43 +28,59 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:text="Items"
+            android:id="@+id/items"
             android:textStyle="bold"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:gravity="left|center"
             />
-        <include
-            layout="@layout/menu_food_items"
-            />
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="60dp"
             android:background="#60000000"
             />
+
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/menu_info_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/items"
+
+
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="75dp" />
+
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_marginTop="65dp"
-            android:text="Grand Total"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/menu_info_recycler"
+            android:layout_alignParentEnd="true"
             android:layout_marginLeft="20dp"
-            android:textSize="14dp"
+            android:layout_marginTop="210dp"
+            android:text="Grand Total"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            />
+            android:textSize="14dp"
+            android:textStyle="bold" />
         <TextView
             android:id="@+id/total_no_of_items"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
-            android:layout_marginTop="65dp"
+            android:layout_below="@+id/menu_info_recycler"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="210dp"
             android:text="2"
             android:layout_marginLeft="300dp"
             android:textSize="14dp"
             android:textColor="@color/black"
             android:textStyle="bold"
             />
+
+
+
 
 
 
