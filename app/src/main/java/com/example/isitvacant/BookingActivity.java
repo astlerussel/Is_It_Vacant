@@ -122,6 +122,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                          intent.putExtra("bookDate",bookDate);
                          intent.putExtra("timeSlot",timeSlot);
                          intent.putExtra("no_of_people",no_of_people);
+                         intent.putExtra("flag","yes");
 
 
                          startActivity(intent);
@@ -144,6 +145,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                          intent.putExtra("bookDate",bookDate);
                          intent.putExtra("timeSlot",timeSlot);
                          intent.putExtra("no_of_people",no_of_people);
+                         intent.putExtra("flag","no");
 
 
                          startActivity(intent);

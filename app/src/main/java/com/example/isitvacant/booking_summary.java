@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +43,7 @@ public class booking_summary extends AppCompatActivity {
     String restoID,uid,timeSlot,bookDate,invoiceID,noOfPeople,tableId;
     TextView grandTotal;
     TextView mobile_no;
+    String flag;
     ArrayList<String> tableIDList;
     FirebaseAuth mAuth ;
     FirebaseFirestore mstore;
@@ -51,49 +54,58 @@ public class booking_summary extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_summary);
         collapsingToolbarLayout = findViewById(R.id.collapsingtoolbar);
-        menuRecyclerList = (RecyclerView) findViewById(R.id.menu_info_recycler);
-        menuRecyclerList.setLayoutManager(new LinearLayoutManager(this));
+   flag = getIntent().getStringExtra("flag");
+
         mAuth = FirebaseAuth.getInstance();
         uid  = mAuth.getCurrentUser().getUid();
         invoiceID = getIntent().getStringExtra("invoiceID");
-        menuRef = db.collection("/users/"+uid+"/current_reservations/"+invoiceID+"/cart");
-        query = menuRef.orderBy("foodName");
-        setUpRecyclerView(query);
-        grandTotal = findViewById(R.id.total_no_of_items);
-        mstore = FirebaseFirestore.getInstance();
-        mstore.collection("/users/"+uid+"/current_reservations/"+invoiceID+"/cart")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value,
-                                        @Nullable FirebaseFirestoreException e) {
+        if(flag.equals("yes")){
+
+           RelativeLayout layout  = findViewById(R.id.menu_info_t);
+
+            layout.setVisibility(View.VISIBLE);
+            menuRecyclerList = (RecyclerView) findViewById(R.id.menu_info_recycler);
+            menuRecyclerList.setLayoutManager(new LinearLayoutManager(this));
+            menuRef = db.collection("/users/"+uid+"/current_reservations/"+invoiceID+"/cart");
+            query = menuRef.orderBy("foodName");
+            setUpRecyclerView(query);
+            grandTotal = findViewById(R.id.total_no_of_items);
+            mstore = FirebaseFirestore.getInstance();
+            mstore.collection("/users/"+uid+"/current_reservations/"+invoiceID+"/cart")
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot value,
+                                            @Nullable FirebaseFirestoreException e) {
 
 
-                        List<Double> allPrice = new ArrayList<>();
-                        double sum =0;
-                        for (QueryDocumentSnapshot doc : value) {
-                            if (doc.get("foodName") != null) {
-                                allPrice.add(doc.getDouble("totalPrice"));
-                                //Toast.makeText(GroupProfileActivity.this, "Messages is: "+value,Toast.LENGTH_LONG).show();
+                            List<Double> allPrice = new ArrayList<>();
+                            double sum =0;
+                            for (QueryDocumentSnapshot doc : value) {
+                                if (doc.get("foodName") != null) {
+                                    allPrice.add(doc.getDouble("totalPrice"));
+                                    //Toast.makeText(GroupProfileActivity.this, "Messages is: "+value,Toast.LENGTH_LONG).show();
+                                }
                             }
+                            //Toast.makeText(GroupChatActivity.this, "Messages are: "+allMssages,Toast.LENGTH_LONG).show();
+
+
+
+                            for(int i=0; i<allPrice.size(); i++)
+
+                            {
+
+
+                                sum = sum+allPrice.get(i);
+
+
+
+
+                            }
+                            grandTotal.setText(String.valueOf(sum));
                         }
-                        //Toast.makeText(GroupChatActivity.this, "Messages are: "+allMssages,Toast.LENGTH_LONG).show();
+                    });
+        }
 
-
-
-                        for(int i=0; i<allPrice.size(); i++)
-
-                        {
-
-
-                            sum = sum+allPrice.get(i);
-
-
-
-
-                        }
-                        grandTotal.setText(String.valueOf(sum));
-                    }
-                });
 
         collapsingToolbarLayout.setExpandedTitleColor(Color.parseColor("#099ae1"));
         collapsingToolbarLayout.setExpandedTitleGravity(Gravity.BOTTOM);
@@ -106,7 +118,7 @@ public class booking_summary extends AppCompatActivity {
         reservation_date = findViewById(R.id.Reservation_date);
         reservation_time = findViewById(R.id.Reservation_time);
         numberOfGuests = findViewById(R.id.no_of_guests);
-        restoID = getIntent().getStringExtra("restoID");
+        restoID = getIntent().getStringExtra("restoUid");
 
 
         timeSlot = getIntent().getStringExtra("timeSlot");
@@ -115,7 +127,7 @@ public class booking_summary extends AppCompatActivity {
         reservation_date.setText(bookDate);
         location = findViewById(R.id.Location);
         table_id = findViewById(R.id.Table_no);
-        tableIDList = getIntent().getStringArrayListExtra("tableID");
+        tableIDList = getIntent().getStringArrayListExtra("tableIDlist");
         tableId = tableIDList.toString();
     tableId = tableId.substring(1,tableId.length()-1);
        table_id.setText(tableId);
@@ -157,9 +169,14 @@ public class booking_summary extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        adapter.startListening();
-        restoID = getIntent().getStringExtra("restoID");
+        flag = getIntent().getStringExtra("flag");
+        if (flag.equals("yes")){
+            adapter.startListening();
+        }
+
+        restoID = getIntent().getStringExtra("restoUid");
         uid  = mAuth.getCurrentUser().getUid();
+        mstore = FirebaseFirestore.getInstance();
         DocumentReference documentReferences = mstore.collection("restaurants").document(restoID);
         documentReferences.addSnapshotListener(booking_summary.this, new EventListener<DocumentSnapshot>() {
             @Override

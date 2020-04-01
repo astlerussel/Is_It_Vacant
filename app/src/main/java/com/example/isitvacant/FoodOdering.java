@@ -145,16 +145,17 @@ Query query;
                     public void onClick(View v) {
 
                         Intent intent = new Intent(getApplicationContext(),booking_summary.class);
-                        intent.putExtra("restoID",getIntent().getStringExtra("restoUid"));
+                        intent.putExtra("restoUid",getIntent().getStringExtra("restoUid"));
                         ArrayList<String> tableID = getIntent().getStringArrayListExtra("tableIDlist");
                         Toast.makeText(FoodOdering.this, getIntent().getStringArrayListExtra("tableIDlist").toString() , Toast.LENGTH_SHORT).show();
 
 
                         intent.putExtra("invoiceID",getIntent().getStringExtra("invoiceID"));
-                        intent.putExtra("tableID",tableID);
+                        intent.putExtra("tableIDlist",tableID);
                         intent.putExtra("bookDate",getIntent().getStringExtra("bookDate"));
                         intent.putExtra("timeSlot",getIntent().getStringExtra("timeSlot"));
                         intent.putExtra("no_of_people",getIntent().getStringExtra("no_of_people"));
+                        intent.putExtra("flag","yes");
                         startActivity(intent);
                     }
                 });
