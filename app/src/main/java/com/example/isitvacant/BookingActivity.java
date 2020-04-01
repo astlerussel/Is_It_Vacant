@@ -37,7 +37,7 @@ import static androidx.constraintlayout.solver.widgets.ConstraintTableLayout.ALI
 public class BookingActivity extends AppCompatActivity implements View.OnClickListener {
 
     ViewGroup layout;
-    static int totalCount=0;
+     int totalCount=0;
     LinearLayout payinglayout;
     TextView Continue;
     ArrayList tableids = new ArrayList();

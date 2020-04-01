@@ -1,10 +1,12 @@
 package com.example.isitvacant;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -17,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -30,7 +34,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class booking_summary extends AppCompatActivity {
     CollapsingToolbarLayout collapsingToolbarLayout;
@@ -47,6 +53,8 @@ public class booking_summary extends AppCompatActivity {
     ArrayList<String> tableIDList;
     FirebaseAuth mAuth ;
     FirebaseFirestore mstore;
+    int seatPrice = 25;
+    int seatTotalPrice;
     TextView hotel_name,reservation_date,reservation_time,table_id,numberOfGuests,location;
     Button Payment;
     @Override
@@ -128,6 +136,7 @@ public class booking_summary extends AppCompatActivity {
         location = findViewById(R.id.Location);
         table_id = findViewById(R.id.Table_no);
         tableIDList = getIntent().getStringArrayListExtra("tableIDlist");
+        seatTotalPrice = seatPrice*tableIDList.size();
         tableId = tableIDList.toString();
     tableId = tableId.substring(1,tableId.length()-1);
        table_id.setText(tableId);
@@ -140,6 +149,61 @@ public class booking_summary extends AppCompatActivity {
         Payment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Map<String, Object> userMap = new HashMap<>();
+
+                userMap.put("userName", username.getText().toString());
+                userMap.put("date", bookDate);
+                userMap.put("timeSlot", timeSlot);
+                userMap.put("guests", noOfPeople);
+                userMap.put("tableId", tableId);
+                userMap.put("location", location.getText().toString());
+                userMap.put("totalSeatPrice", seatTotalPrice);
+                userMap.put("hotelName", hotel_name.getText().toString());
+
+
+
+
+
+
+
+
+                mstore.collection("users")
+                        .document(uid).collection("current_reservations").document(invoiceID)
+                        .set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(booking_summary.this, "Seat Reservation Successful", Toast.LENGTH_LONG).show();
+
+                    }
+
+
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        String error = e.getMessage();
+                        Toast.makeText(booking_summary.this, "Error" + error, Toast.LENGTH_LONG).show();
+                    }
+                });
+                mstore.collection("restaurants")
+                        .document(restoID).collection("current_reservations").document(invoiceID)
+                        .set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                       Intent intent = new Intent(booking_summary.this,MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+
+
+                    }
+
+
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        String error = e.getMessage();
+                        Toast.makeText(booking_summary.this, "Error" + error, Toast.LENGTH_LONG).show();
+                    }
+                });
                 Toast.makeText(booking_summary.this, "Payment", Toast.LENGTH_SHORT).show();
             }
         });

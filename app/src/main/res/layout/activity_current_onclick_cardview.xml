@@ -194,6 +194,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
+        android:id="@+id/hotel_info"
         android:layout_height="185dp"
         android:layout_marginTop="280dp"
         android:layout_marginLeft="10dp"
@@ -279,6 +280,17 @@
 
 
     </androidx.cardview.widget.CardView>
+    <Button
+        android:id="@+id/checkout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="219dp"
+        android:background="#0085EA"
+        android:textColor="#fff"
+        android:textStyle="bold"
+        android:layout_marginStart="210dp"
+        android:text="Checkout"
+        />
 
 
 
