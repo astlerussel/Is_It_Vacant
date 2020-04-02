@@ -1,9 +1,12 @@
 package com.example.isitvacant;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
@@ -16,8 +19,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class FoodOdering extends AppCompatActivity {
 
@@ -39,6 +57,11 @@ public class FoodOdering extends AppCompatActivity {
 
     BottomSheetDialog dialog;
     TextView cart,Reserve;
+    FirebaseFirestore mstore ;
+    String uid,invoiceID;
+    FirebaseAuth mAuth;
+    TextView noOfFoodItems;
+     CartAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,18 +73,90 @@ public class FoodOdering extends AppCompatActivity {
         mViewPager.setAdapter(myFoodAccessAdapter);
         mTabLayout = findViewById(R.id.main_tab);
         mTabLayout.setupWithViewPager(mViewPager);
+        noOfFoodItems = findViewById(R.id.no_of_food_items);
+        mAuth = FirebaseAuth.getInstance();
+        uid  = mAuth.getCurrentUser().getUid();
+        invoiceID = getIntent().getStringExtra("invoiceID");
+        mstore = FirebaseFirestore.getInstance();
+        mstore.collection("/users/"+uid+"/current_reservations/"+invoiceID+"/cart")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+
+
+                        List<Double> allItems = new ArrayList<>();
+                        double sum =0;
+                        for (QueryDocumentSnapshot doc : value) {
+                            if (doc.get("foodName") != null) {
+                                allItems.add(doc.getDouble("quantity"));
+                                //Toast.makeText(GroupProfileActivity.this, "Messages is: "+value,Toast.LENGTH_LONG).show();
+                            }
+                        }
+                        //Toast.makeText(GroupChatActivity.this, "Messages are: "+allMssages,Toast.LENGTH_LONG).show();
+
+
+
+                        for(int i=0; i<allItems.size(); i++)
+
+                        {
+
+
+                            sum = sum+allItems.get(i);
+
+
+
+
+                        }
+                        int sumInt = (int)sum;
+                        noOfFoodItems.setText(String.valueOf(sumInt));
+                    }
+                });
 
         cart = findViewById(R.id.cart);
         cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+FirebaseFirestore db = FirebaseFirestore.getInstance();
+Query query;
+
                 dialog = new BottomSheetDialog(FoodOdering.this);
                 dialog.setContentView(R.layout.view_cart);
+                uid  = mAuth.getCurrentUser().getUid();
+                invoiceID = getIntent().getStringExtra("invoiceID");
+                CollectionReference menuRef = db.collection("/users/"+uid+"/current_reservations/"+invoiceID+"/cart");
+                query = menuRef;
+                FirestoreRecyclerOptions<ModelMenuInfo> options = new FirestoreRecyclerOptions.Builder<ModelMenuInfo>()
+                        .setQuery(query, ModelMenuInfo.class)
+                        .build();
+
+                adapter = new CartAdapter(options);
+
+                RecyclerView recyclerView = dialog.findViewById(R.id.cart_recycler);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new LinearLayoutManager(FoodOdering.this));
+                recyclerView.setAdapter(adapter);
+                adapter.startListening();
                 Reserve = dialog.findViewById(R.id.Reserve_food);
                 Reserve.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(FoodOdering.this,booking_summary.class));
+
+                        Intent intent = new Intent(getApplicationContext(),booking_summary.class);
+                        intent.putExtra("restoUid",getIntent().getStringExtra("restoUid"));
+                        ArrayList<String> tableID = getIntent().getStringArrayListExtra("tableIDlist");
+                        Toast.makeText(FoodOdering.this, getIntent().getStringArrayListExtra("tableIDlist").toString() , Toast.LENGTH_SHORT).show();
+
+
+                        intent.putExtra("invoiceID",getIntent().getStringExtra("invoiceID"));
+                        intent.putExtra("tableIDlist",tableID);
+                        intent.putExtra("bookDate",getIntent().getStringExtra("bookDate"));
+                        intent.putExtra("timeSlot",getIntent().getStringExtra("timeSlot"));
+                        intent.putExtra("no_of_people",getIntent().getStringExtra("no_of_people"));
+                        intent.putExtra("flag","yes");
+                        startActivity(intent);
                     }
                 });
 
@@ -74,6 +169,8 @@ public class FoodOdering extends AppCompatActivity {
 
 
     }
+
+
 }
 
 

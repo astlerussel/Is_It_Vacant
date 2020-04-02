@@ -83,7 +83,7 @@ public class Breakfast_fragment extends Fragment {
                 .setQuery(query, ModelMenu.class)
                 .build();
 
-        adapter = new MenuAdapter(options);
+        adapter = new MenuAdapter(options,getActivity().getIntent().getStringExtra("invoiceID"),getActivity().getIntent().getStringExtra("restoUid"));
 
         RecyclerView recyclerView = groupsFreagmentView.findViewById(R.id.breakfast_recycler);
         recyclerView.setHasFixedSize(true);
@@ -105,8 +105,13 @@ public class Breakfast_fragment extends Fragment {
 
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null){
+            adapter.stopListening();
 
-
-
+        }
+    }
 }
 

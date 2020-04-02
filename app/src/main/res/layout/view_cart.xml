@@ -14,8 +14,16 @@
         android:layout_marginTop="25dp"
         app:cardBackgroundColor="@color/white"
         >
-        <include
-            layout="@layout/list_of_food_items"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cart_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/items"
+
+
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="75dp" />
         <include
             layout="@layout/reserve_food_button"/>
 

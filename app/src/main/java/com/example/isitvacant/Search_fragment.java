@@ -100,6 +100,23 @@ public class Search_fragment extends Fragment {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 query = contactsRef.orderBy("name");
                 setUpRecyclerView(query);
+                adapter.setOnItemClickListener(new RestaurantsAdapter.OnItemClickListener() {
+                    @Override
+                    public void OnItemClick(DocumentSnapshot documentSnapshot, int position) {
+                        String[] pathwithuid;
+                        String path =documentSnapshot.getReference().getPath();
+                        //Toast.makeText(FindFriendsActivity.this,"Position"+position+"\t UID:"+id,Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getContext(),RestaurantsDetails.class);
+
+                        pathwithuid = path.split("/");
+                        String uid2=pathwithuid[1];
+                        intent.putExtra("uid",uid2);
+
+
+                        startActivity(intent);
+
+                    }
+                });
 
             }
 
@@ -108,12 +125,47 @@ public class Search_fragment extends Fragment {
                 if (s.length()==0){
                     query = contactsRef.orderBy("name");
                     setUpRecyclerView(query);
+
+                    adapter.setOnItemClickListener(new RestaurantsAdapter.OnItemClickListener() {
+                        @Override
+                        public void OnItemClick(DocumentSnapshot documentSnapshot, int position) {
+                            String[] pathwithuid;
+                            String path =documentSnapshot.getReference().getPath();
+                            //Toast.makeText(FindFriendsActivity.this,"Position"+position+"\t UID:"+id,Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(getContext(),RestaurantsDetails.class);
+
+                            pathwithuid = path.split("/");
+                            String uid2=pathwithuid[1];
+                            intent.putExtra("uid",uid2);
+
+
+                            startActivity(intent);
+
+                        }
+                    });
                     adapter.startListening();
 
                 }
                 else {
                     query = contactsRef.orderBy("name").startAt(s.toString()).endAt(s.toString() + "\uf8ff");
                     setUpRecyclerView(query);
+                    adapter.setOnItemClickListener(new RestaurantsAdapter.OnItemClickListener() {
+                        @Override
+                        public void OnItemClick(DocumentSnapshot documentSnapshot, int position) {
+                            String[] pathwithuid;
+                            String path =documentSnapshot.getReference().getPath();
+                            //Toast.makeText(FindFriendsActivity.this,"Position"+position+"\t UID:"+id,Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(getContext(),RestaurantsDetails.class);
+
+                            pathwithuid = path.split("/");
+                            String uid2=pathwithuid[1];
+                            intent.putExtra("uid",uid2);
+
+
+                            startActivity(intent);
+
+                        }
+                    });
                     adapter.startListening();
                 }
 

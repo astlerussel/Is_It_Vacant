@@ -82,7 +82,7 @@ public class Dinner_fragment extends Fragment {
                 .setQuery(query, ModelMenu.class)
                 .build();
 
-        adapter = new MenuAdapter(options);
+        adapter = new MenuAdapter(options,getActivity().getIntent().getStringExtra("invoiceID"),getActivity().getIntent().getStringExtra("restoUid"));
 
         RecyclerView recyclerView = groupsFreagmentView.findViewById(R.id.dinner_recycler);
         recyclerView.setHasFixedSize(true);
