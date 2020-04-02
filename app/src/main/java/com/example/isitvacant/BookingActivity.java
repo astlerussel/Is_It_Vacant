@@ -147,6 +147,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                                  intent.putExtra("timeSlot",timeSlot);
                                  intent.putExtra("no_of_people",no_of_people);
                                  intent.putExtra("flag","yes");
+                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
 
 
@@ -208,6 +209,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                                      intent.putExtra("timeSlot",timeSlot);
                                      intent.putExtra("no_of_people",no_of_people);
                                      intent.putExtra("flag","no");
+                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
 
                                      startActivity(intent);

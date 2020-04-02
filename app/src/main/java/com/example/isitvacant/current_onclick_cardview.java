@@ -88,6 +88,7 @@ public class current_onclick_cardview extends AppCompatActivity {
         menuRecyclerList.setLayoutManager(new LinearLayoutManager(this));
         String invoiceId = getIntent().getStringExtra("uid");
         char flag = invoiceId.charAt(invoiceId.length()-1);
+
         if(flag=='N'){
 
             RelativeLayout layout = findViewById(R.id.menu_info_t);
@@ -98,7 +99,7 @@ public class current_onclick_cardview extends AppCompatActivity {
         else{
             RelativeLayout layout = findViewById(R.id.menu_info_t);
 
-            layout.setVisibility(View.INVISIBLE);
+            layout.setVisibility(View.VISIBLE);
         }
         String reserve = getIntent().getStringExtra("reserve");
         if (reserve.equals("current_reservations")) {
@@ -176,6 +177,7 @@ public class current_onclick_cardview extends AppCompatActivity {
                                 userMap.put("totalSeatPrice", (int) totalPrice);
                                 userMap.put("hotelName", hotelName);
                                 userMap.put("restoID", restoID);
+                                userMap.put("Mobile", mobile_no.getText().toString());
 
 
                                 mstore.collection("users")

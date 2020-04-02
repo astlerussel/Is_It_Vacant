@@ -160,6 +160,7 @@ public class booking_summary extends AppCompatActivity {
                 userMap.put("totalSeatPrice", seatTotalPrice);
                 userMap.put("hotelName", hotel_name.getText().toString());
                 userMap.put("restoID", restoID);
+                userMap.put("Mobile",mobile_no.getText().toString());
 
 
 
