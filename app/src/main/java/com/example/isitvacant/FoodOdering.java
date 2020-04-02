@@ -1,5 +1,6 @@
 package com.example.isitvacant;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -20,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -171,6 +174,140 @@ Query query;
     }
 
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+
+        final String restoID = getIntent().getStringExtra("restoUid");
+        String invoiceId = getIntent().getStringExtra("invoiceID");
+
+
+
+        mstore.collection("/users/" + uid + "/current_reservations/" + invoiceId + "/cart")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+
+
+                        final List<String> cartUid = new ArrayList<>();
+
+                        for (QueryDocumentSnapshot doc : value) {
+                            if (doc.get("foodName") != null) {
+                                cartUid.add(doc.getString("foodName"));
+                                //Toast.makeText(GroupProfileActivity.this, "Messages is: "+value,Toast.LENGTH_LONG).show();
+                            }
+                        }
+                        //Toast.makeText(GroupChatActivity.this, "Messages are: "+allMssages,Toast.LENGTH_LONG).show();
+
+
+                        if (cartUid.size() != 0) {
+
+                            for (int i = 0; i < cartUid.size(); i++) {
+
+                                final String foodName = cartUid.get(i);
+
+                                final String uid2 = FirebaseAuth.getInstance().getUid();
+                                String invoiceId = getIntent().getStringExtra("invoiceID");
+
+                                mstore.collection("users")
+                                        .document(uid2).collection("current_reservations").document(invoiceId).collection("cart").document(foodName)
+                                        .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+
+                                    }
+
+
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        String error = e.getMessage();
+                                        Toast.makeText(FoodOdering.this, "Error" + error, Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+
+
+
+
+                                mstore.collection("restaurants")
+                                        .document(restoID).collection("current_reservations").document(invoiceId).collection("cart").document(foodName)
+                                        .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+
+                                    }
+
+
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        String error = e.getMessage();
+                                        Toast.makeText(FoodOdering.this, "Error" + error, Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+                                mstore.collection("restaurants")
+                                        .document(restoID).collection("current_reservations").document(invoiceId)
+                                        .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+
+                                    }
+
+
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        String error = e.getMessage();
+                                        Toast.makeText(FoodOdering.this, "Error" + error, Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                                mstore.collection("users")
+                                        .document(uid2).collection("current_reservations").document(invoiceId)
+                                        .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+
+                                    }
+
+
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        String error = e.getMessage();
+                                        Toast.makeText(FoodOdering.this, "Error" + error, Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+
+
+
+
+
+                            }
+
+
+
+
+
+                        }
+
+
+
+                    }
+                });
+
+        finish();
+    }
 }
 
 
