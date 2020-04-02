@@ -72,6 +72,7 @@ public class CurrentReservationFreagment extends Fragment {
                 pathwithuid = path.split("/");
                 String uid2=pathwithuid[3];
                 intent.putExtra("uid",uid2);
+                intent.putExtra("reserve","current_reservations");
 
 
                 startActivity(intent);
