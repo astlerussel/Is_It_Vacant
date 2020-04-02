@@ -83,25 +83,35 @@ public class current_onclick_cardview extends AppCompatActivity {
         numberOfGuests = findViewById(R.id.no_of_guests2);
         Location = findViewById(R.id.Location2);
         table_id = findViewById(R.id.Table_no2);
-        RelativeLayout layout  = findViewById(R.id.menu_info_t);
 
-        layout.setVisibility(View.VISIBLE);
         menuRecyclerList = (RecyclerView) findViewById(R.id.menu_info_recycler);
         menuRecyclerList.setLayoutManager(new LinearLayoutManager(this));
-        String invoiceId =getIntent().getStringExtra("uid");
-        String reserve = getIntent().getStringExtra("reserve");
-        if(reserve.equals("current_reservations")){
-            checkout.setVisibility(View.VISIBLE);
+        String invoiceId = getIntent().getStringExtra("uid");
+        char flag = invoiceId.charAt(invoiceId.length()-1);
+        if(flag=='N'){
+
+            RelativeLayout layout = findViewById(R.id.menu_info_t);
+
+            layout.setVisibility(View.INVISIBLE);
+
         }
         else{
+            RelativeLayout layout = findViewById(R.id.menu_info_t);
+
+            layout.setVisibility(View.INVISIBLE);
+        }
+        String reserve = getIntent().getStringExtra("reserve");
+        if (reserve.equals("current_reservations")) {
+            checkout.setVisibility(View.VISIBLE);
+        } else {
             checkout.setVisibility(View.INVISIBLE);
         }
-        menuRef = db.collection("/users/"+uid+"/"+reserve+"/"+invoiceId+"/cart");
+        menuRef = db.collection("/users/" + uid + "/" + reserve + "/" + invoiceId + "/cart");
         query = menuRef.orderBy("foodName");
         setUpRecyclerView(query);
         grandTotal = findViewById(R.id.total_no_of_items);
 
-        mstore.collection("/users/"+uid+"/"+reserve+"/"+invoiceId+"/cart")
+        mstore.collection("/users/" + uid + "/" + reserve + "/" + invoiceId + "/cart")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
@@ -109,7 +119,7 @@ public class current_onclick_cardview extends AppCompatActivity {
 
 
                         List<Double> allPrice = new ArrayList<>();
-                        double sum =0;
+                        double sum = 0;
                         for (QueryDocumentSnapshot doc : value) {
                             if (doc.get("foodName") != null) {
                                 allPrice.add(doc.getDouble("totalPrice"));
@@ -118,16 +128,10 @@ public class current_onclick_cardview extends AppCompatActivity {
                         }
 
 
+                        for (int i = 0; i < allPrice.size(); i++) {
 
 
-                        for(int i=0; i<allPrice.size(); i++)
-
-                        {
-
-
-                            sum = sum+allPrice.get(i);
-
-
+                            sum = sum + allPrice.get(i);
 
 
                         }
@@ -136,222 +140,288 @@ public class current_onclick_cardview extends AppCompatActivity {
                 });
 
 
-        checkout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                String invoiceId =getIntent().getStringExtra("uid");
+            checkout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                DocumentReference documentReferences2 = mstore.collection("users").document(uid).collection("current_reservations").document(invoiceId);
-                documentReferences2.addSnapshotListener(current_onclick_cardview.this, new EventListener<DocumentSnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                        if(documentSnapshot.exists()){
-                        String invoiceId = getIntent().getStringExtra("uid");
+                    String invoiceId = getIntent().getStringExtra("uid");
 
-                        username = documentSnapshot.getString("userName");
-                        hotelName = documentSnapshot.getString("hotelName");
-                        guests = documentSnapshot.getString("guests");
-                        timeSlot = documentSnapshot.getString("timeSlot");
-                        tableNo = documentSnapshot.getString("tableId");
-                        bookDate = documentSnapshot.getString("date");
-                        location = documentSnapshot.getString("location");
-                        restoID = documentSnapshot.getString("restoID");
-                        totalPrice = documentSnapshot.getDouble("totalSeatPrice");
+                    DocumentReference documentReferences2 = mstore.collection("users").document(uid).collection("current_reservations").document(invoiceId);
+                    documentReferences2.addSnapshotListener(current_onclick_cardview.this, new EventListener<DocumentSnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable final DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                            if (documentSnapshot.exists()) {
+                                final String invoiceId = getIntent().getStringExtra("uid");
 
-
-                        Map<String, Object> userMap = new HashMap<>();
-
-                        userMap.put("userName", username);
-                        userMap.put("date", bookDate);
-                        userMap.put("timeSlot", timeSlot);
-                        userMap.put("guests", guests);
-                        userMap.put("tableId", tableNo);
-                        userMap.put("location", location);
-                        userMap.put("totalSeatPrice", (int) totalPrice);
-                        userMap.put("hotelName", hotelName);
-                        userMap.put("restoID", restoID);
+                                username = documentSnapshot.getString("userName");
+                                hotelName = documentSnapshot.getString("hotelName");
+                                guests = documentSnapshot.getString("guests");
+                                timeSlot = documentSnapshot.getString("timeSlot");
+                                tableNo = documentSnapshot.getString("tableId");
+                                bookDate = documentSnapshot.getString("date");
+                                location = documentSnapshot.getString("location");
+                                restoID = documentSnapshot.getString("restoID");
+                                totalPrice = documentSnapshot.getDouble("totalSeatPrice");
 
 
-                        mstore.collection("users")
-                                .document(uid).collection("previous_reservations").document(invoiceId)
-                                .set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                //Toast.makeText(current_onclick_cardview.this, "Seat Reservation Successful", Toast.LENGTH_LONG).show();
+                                Map<String, Object> userMap = new HashMap<>();
 
-                            }
-
-
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                String error = e.getMessage();
-                                Toast.makeText(current_onclick_cardview.this, "Error" + error, Toast.LENGTH_LONG).show();
-                            }
-                        });
-                        mstore.collection("restaurants")
-                                .document(restoID).collection("previous_reservations").document(invoiceId)
-                                .set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
+                                userMap.put("userName", username);
+                                userMap.put("date", bookDate);
+                                userMap.put("timeSlot", timeSlot);
+                                userMap.put("guests", guests);
+                                userMap.put("tableId", tableNo);
+                                userMap.put("location", location);
+                                userMap.put("totalSeatPrice", (int) totalPrice);
+                                userMap.put("hotelName", hotelName);
+                                userMap.put("restoID", restoID);
 
 
-                            }
-
-
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                String error = e.getMessage();
-                                Toast.makeText(current_onclick_cardview.this, "Error" + error, Toast.LENGTH_LONG).show();
-                            }
-                        });
-
-
-                        mstore.collection("/users/" + uid + "/current_reservations/" + invoiceId + "/cart")
-                                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                mstore.collection("users")
+                                        .document(uid).collection("previous_reservations").document(invoiceId)
+                                        .set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
-                                    public void onEvent(@Nullable QuerySnapshot value,
-                                                        @Nullable FirebaseFirestoreException e) {
+                                    public void onSuccess(Void aVoid) {
+                                        //Toast.makeText(current_onclick_cardview.this, "Seat Reservation Successful", Toast.LENGTH_LONG).show();
+
+                                    }
 
 
-                                        final List<String> cartUid = new ArrayList<>();
-
-                                        for (QueryDocumentSnapshot doc : value) {
-                                            if (doc.get("foodName") != null) {
-                                                cartUid.add(doc.getString("foodName"));
-                                                //Toast.makeText(GroupProfileActivity.this, "Messages is: "+value,Toast.LENGTH_LONG).show();
-                                            }
-                                        }
-                                        //Toast.makeText(GroupChatActivity.this, "Messages are: "+allMssages,Toast.LENGTH_LONG).show();
-
-
-                                        if (cartUid.size() != 0) {
-
-                                            for (int i = 0; i < cartUid.size(); i++) {
-
-                                                final String foodName = cartUid.get(i);
-
-                                                final String uid2 = FirebaseAuth.getInstance().getUid();
-                                                String invoiceId = getIntent().getStringExtra("uid");
-                                                DocumentReference documentReferences2 = mstore.collection("users").document(uid2).collection("current_reservations").document(invoiceId).collection("cart").document(foodName);
-                                                final int finalI = i;
-                                                documentReferences2.addSnapshotListener(current_onclick_cardview.this, new EventListener<DocumentSnapshot>() {
-                                                    @Override
-                                                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-
-                                                        if (documentSnapshot.exists()) {
-                                                            name = documentSnapshot.getString("foodName");
-                                                            foodImage = documentSnapshot.getString("image");
-                                                            quantity = documentSnapshot.getDouble("quantity");
-                                                            price = documentSnapshot.getDouble("totalPrice");
-                                                            type = documentSnapshot.getString("type");
-                                                            //Toast.makeText(current_onclick_cardview.this, documentSnapshot.getString("foodName")+"  "+foodImage+"  "+quantity+"  "+price+"   "+type,Toast.LENGTH_LONG).show();
-
-                                                            Map<String, Object> userMap = new HashMap<>();
-
-                                                            userMap.put("foodName", name);
-                                                            userMap.put("image", foodImage);
-                                                            userMap.put("totalPrice", (int) price);
-                                                            userMap.put("quantity", (int) quantity);
-                                                            userMap.put("type", type);
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        String error = e.getMessage();
+                                        Toast.makeText(current_onclick_cardview.this, "Error" + error, Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                                mstore.collection("restaurants")
+                                        .document(restoID).collection("previous_reservations").document(invoiceId)
+                                        .set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
 
 
-                                                            String invoiceId = getIntent().getStringExtra("uid");
-
-                                                            mstore.collection("users")
-                                                                    .document(uid2).collection("previous_reservations").document(invoiceId).collection("cart").document(name)
-                                                                    .set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                @Override
-                                                                public void onSuccess(Void aVoid) {
+                                    }
 
 
-                                                                }
-
-
-                                                            }).addOnFailureListener(new OnFailureListener() {
-                                                                @Override
-                                                                public void onFailure(@NonNull Exception e) {
-                                                                    String error = e.getMessage();
-                                                                    Toast.makeText(current_onclick_cardview.this, "Error" + error, Toast.LENGTH_LONG).show();
-                                                                }
-                                                            });
-                                                            mstore.collection("restaurants")
-                                                                    .document(restoID).collection("previous_reservations").document(invoiceId).collection("cart").document(foodName)
-                                                                    .set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                @Override
-                                                                public void onSuccess(Void aVoid) {
-
-
-                                                                }
-
-
-                                                            }).addOnFailureListener(new OnFailureListener() {
-                                                                @Override
-                                                                public void onFailure(@NonNull Exception e) {
-                                                                    String error = e.getMessage();
-                                                                    Toast.makeText(current_onclick_cardview.this, "Error" + error, Toast.LENGTH_LONG).show();
-                                                                }
-                                                            });
-
-                                                        }
-
-
-                                                    }
-                                                });
-
-
-                                            }
-                                            deleteDocs(cartUid);
-
-
-                                        }
-
-
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        String error = e.getMessage();
+                                        Toast.makeText(current_onclick_cardview.this, "Error" + error, Toast.LENGTH_LONG).show();
                                     }
                                 });
 
 
-                        mstore.collection("restaurants")
-                                .document(documentSnapshot.getString("restoID")).collection("current_reservations").document(invoiceId)
-                                .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                mstore.collection("/users/" + uid + "/current_reservations/" + invoiceId + "/cart")
+                                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onEvent(@Nullable QuerySnapshot value,
+                                                                @Nullable FirebaseFirestoreException e) {
 
-                            @Override
-                            public void onSuccess(Void aVoid) {
+
+                                                final List<String> cartUid = new ArrayList<>();
+
+                                                for (QueryDocumentSnapshot doc : value) {
+                                                    if (doc.get("foodName") != null) {
+                                                        cartUid.add(doc.getString("foodName"));
+                                                        //Toast.makeText(GroupProfileActivity.this, "Messages is: "+value,Toast.LENGTH_LONG).show();
+                                                    }
+                                                }
+                                                //Toast.makeText(GroupChatActivity.this, "Messages are: "+allMssages,Toast.LENGTH_LONG).show();
+
+
+                                                if (cartUid.size() != 0) {
+
+                                                    for (int i = 0; i < cartUid.size(); i++) {
+
+                                                        final String foodName = cartUid.get(i);
+
+                                                        final String uid2 = FirebaseAuth.getInstance().getUid();
+                                                        String invoiceId = getIntent().getStringExtra("uid");
+                                                        DocumentReference documentReferences2 = mstore.collection("users").document(uid2).collection("current_reservations").document(invoiceId).collection("cart").document(foodName);
+                                                        final int finalI = i;
+                                                        documentReferences2.addSnapshotListener(current_onclick_cardview.this, new EventListener<DocumentSnapshot>() {
+                                                            @Override
+                                                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+
+                                                                if (documentSnapshot.exists()) {
+                                                                    name = documentSnapshot.getString("foodName");
+                                                                    foodImage = documentSnapshot.getString("image");
+                                                                    quantity = documentSnapshot.getDouble("quantity");
+                                                                    price = documentSnapshot.getDouble("totalPrice");
+                                                                    type = documentSnapshot.getString("type");
+                                                                    //Toast.makeText(current_onclick_cardview.this, documentSnapshot.getString("foodName")+"  "+foodImage+"  "+quantity+"  "+price+"   "+type,Toast.LENGTH_LONG).show();
+
+                                                                    Map<String, Object> userMap = new HashMap<>();
+
+                                                                    userMap.put("foodName", name);
+                                                                    userMap.put("image", foodImage);
+                                                                    userMap.put("totalPrice", (int) price);
+                                                                    userMap.put("quantity", (int) quantity);
+                                                                    userMap.put("type", type);
+
+
+                                                                    String invoiceId = getIntent().getStringExtra("uid");
+
+                                                                    mstore.collection("users")
+                                                                            .document(uid2).collection("previous_reservations").document(invoiceId).collection("cart").document(name)
+                                                                            .set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                        @Override
+                                                                        public void onSuccess(Void aVoid) {
+
+
+                                                                        }
+
+
+                                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                                        @Override
+                                                                        public void onFailure(@NonNull Exception e) {
+                                                                            String error = e.getMessage();
+                                                                            Toast.makeText(current_onclick_cardview.this, "Error" + error, Toast.LENGTH_LONG).show();
+                                                                        }
+                                                                    });
+                                                                    mstore.collection("restaurants")
+                                                                            .document(restoID).collection("previous_reservations").document(invoiceId).collection("cart").document(foodName)
+                                                                            .set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                        @Override
+                                                                        public void onSuccess(Void aVoid) {
+
+
+                                                                        }
+
+
+                                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                                        @Override
+                                                                        public void onFailure(@NonNull Exception e) {
+                                                                            String error = e.getMessage();
+                                                                            Toast.makeText(current_onclick_cardview.this, "Error" + error, Toast.LENGTH_LONG).show();
+                                                                        }
+                                                                    });
+
+
+                                                                    mstore.collection("restaurants")
+                                                                            .document(restoID).collection("current_reservations").document(invoiceId).collection("cart").document(foodName)
+                                                                            .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                        @Override
+                                                                        public void onSuccess(Void aVoid) {
+
+
+                                                                        }
+
+
+                                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                                        @Override
+                                                                        public void onFailure(@NonNull Exception e) {
+                                                                            String error = e.getMessage();
+                                                                            Toast.makeText(current_onclick_cardview.this, "Error" + error, Toast.LENGTH_LONG).show();
+                                                                        }
+                                                                    });
+
+                                                                    mstore.collection("restaurants")
+                                                                            .document(restoID).collection("current_reservations").document(invoiceId)
+                                                                            .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                                                                        @Override
+                                                                        public void onSuccess(Void aVoid) {
+
+
+                                                                        }
+
+
+                                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                                        @Override
+                                                                        public void onFailure(@NonNull Exception e) {
+                                                                            String error = e.getMessage();
+                                                                            Toast.makeText(current_onclick_cardview.this, "Error" + error, Toast.LENGTH_LONG).show();
+                                                                        }
+                                                                    });
+
+                                                                }
+
+
+                                                            }
+                                                        });
+
+
+                                                    }
+
+
+                                                    deleteDocs(cartUid);
+
+
+                                                }
+                                                else if(cartUid.size()==0){
+
+
+                                                    String uid3 = FirebaseAuth.getInstance().getUid();
+
+                                                    mstore.collection("restaurants")
+                                                            .document(restoID).collection("current_reservations").document(invoiceId)
+                                                            .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+
+
+                                                        }
+
+
+                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            String error = e.getMessage();
+                                                            Toast.makeText(current_onclick_cardview.this, "Error" + error, Toast.LENGTH_LONG).show();
+                                                        }
+                                                    });
+
+                                                    mstore.collection("users")
+                                                            .document(uid3).collection("current_reservations").document(invoiceId)
+                                                            .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            Toast.makeText(current_onclick_cardview.this, "Successfully Checked Out!!", Toast.LENGTH_LONG).show();
+
+
+                                                        }
+
+
+                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            String error = e.getMessage();
+                                                            Toast.makeText(current_onclick_cardview.this, "Error" + error, Toast.LENGTH_LONG).show();
+                                                        }
+                                                    });
+
+
+                                                    Intent intent = new Intent(current_onclick_cardview.this,MainActivity.class);
+
+                                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                    startActivity(intent);
+
+                                                }
+
+
+                                            }
+                                        });
 
 
                             }
+                        }
+                    });
 
 
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                String error = e.getMessage();
-                                Toast.makeText(current_onclick_cardview.this, "Error" + error, Toast.LENGTH_LONG).show();
-                            }
-                        });
+                }
 
-                    }
-                    }
-                });
+
+            });
 
 
 
 
-
-
-
-
-
-
-            }
-
-
-        });
-
-
-        collapsingToolbarLayout.setTitle("Chowks Food Court");
 
         collapsingToolbarLayout.setExpandedTitleTypeface(Typeface.DEFAULT_BOLD);
     }
@@ -400,8 +470,8 @@ public class current_onclick_cardview extends AppCompatActivity {
             });
 
             if(i ==cartUid.size()-1){
-                Intent intent = new Intent(current_onclick_cardview.this,MainActivity.class);
-                startActivity(intent);
+
+
 
                 mstore.collection("users")
                         .document(uid3).collection("current_reservations").document(invoiceId)
@@ -422,6 +492,12 @@ public class current_onclick_cardview extends AppCompatActivity {
                         Toast.makeText(current_onclick_cardview.this, "Error" + error, Toast.LENGTH_LONG).show();
                     }
                 });
+
+
+                Intent intent = new Intent(current_onclick_cardview.this,MainActivity.class);
+
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
 
 
 
@@ -477,7 +553,7 @@ public class current_onclick_cardview extends AppCompatActivity {
 
                 if (documentSnapshot.exists()){
 
-
+                    collapsingToolbarLayout.setTitle(documentSnapshot.getString("hotelName"));
                     hotel_name.setText(documentSnapshot.getString("hotelName"));
                     reservation_date.setText(documentSnapshot.getString("date"));
                     reservation_time.setText(documentSnapshot.getString("timeSlot"));
@@ -498,5 +574,11 @@ public class current_onclick_cardview extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+      adapter.stopListening();
+        finish();
 
+    }
 }

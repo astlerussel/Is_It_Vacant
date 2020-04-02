@@ -421,6 +421,7 @@ public class RestaurantsDetails extends AppCompatActivity {
                             intent.putExtra("timeSlot",time_slot);
                             intent.putExtra("no_of_people",no_of_people);
                             intent.putExtra("restoUid",proUid);
+
                             startActivity(intent);
 
                         }
@@ -464,7 +465,7 @@ public class RestaurantsDetails extends AppCompatActivity {
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(final RatingBar ratingBar, final float rating, boolean fromUser) {
-                Toast.makeText(RestaurantsDetails.this, ""+rating, Toast.LENGTH_SHORT).show();
+
 
 
 
