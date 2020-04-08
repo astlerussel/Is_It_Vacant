@@ -10,13 +10,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +44,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class FoodOdering extends AppCompatActivity {
+    Dialog dialog1;
+    CardView Yes,No;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -70,6 +75,7 @@ public class FoodOdering extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_odering);
+
 
         mViewPager = findViewById(R.id.main_tabs_pager);
         myFoodAccessAdapter = new FoodAccessAdapter(getSupportFragmentManager());
@@ -173,9 +179,40 @@ Query query;
 
     }
 
+    @Override
+    public void onBackPressed() {
+
+        dialog1 = new Dialog(FoodOdering.this,R.style.book_now_pop);
+        WindowManager.LayoutParams wmlp = dialog1.getWindow().getAttributes();
+        wmlp.gravity = Gravity.TOP;
+        wmlp.y=110;
+
+        dialog1.setContentView(R.layout.cancel_resevation);
+        dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
+        dialog1.setCanceledOnTouchOutside(true);
+        Yes = dialog1.findViewById(R.id.Yes1);
+        No = dialog1.findViewById(R.id.No1);
+
+        Yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDestroy();
+            }
+        });
+        No.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog1.dismiss();
+            }
+        });
+        dialog1.show();
+    }
 
     @Override
     protected void onDestroy() {
+
         super.onDestroy();
 
 
@@ -277,6 +314,7 @@ Query query;
                                     public void onSuccess(Void aVoid) {
 
 
+
                                     }
 
 
@@ -287,6 +325,11 @@ Query query;
                                         Toast.makeText(FoodOdering.this, "Error" + error, Toast.LENGTH_LONG).show();
                                     }
                                 });
+
+
+
+
+
 
 
 
@@ -306,7 +349,9 @@ Query query;
                     }
                 });
 
-        finish();
+
+
+
     }
 }
 

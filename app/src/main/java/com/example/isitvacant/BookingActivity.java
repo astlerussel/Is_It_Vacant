@@ -243,7 +243,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
         layoutSeat.setLayoutParams(params);
         layoutSeat.setPadding(0 * seatGaping, 0 * seatGaping, 0 * seatGaping, 0 * seatGaping);
         layout.addView(layoutSeat);
-        Toast.makeText(BookingActivity.this, getIntent().getStringExtra("bookDate")+"  "+getIntent().getStringExtra("timeSlot")+"  "+getIntent().getStringExtra("no_of_people"), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(BookingActivity.this, getIntent().getStringExtra("bookDate")+"  "+getIntent().getStringExtra("timeSlot")+"  "+getIntent().getStringExtra("no_of_people"), Toast.LENGTH_SHORT).show();
 
 
         LinearLayout layout = null;

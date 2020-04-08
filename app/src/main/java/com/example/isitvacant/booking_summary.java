@@ -3,15 +3,19 @@ package com.example.isitvacant;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -55,6 +59,8 @@ public class booking_summary extends AppCompatActivity {
     FirebaseFirestore mstore;
     int seatPrice = 25;
     int seatTotalPrice;
+    Dialog dialog1;
+    CardView Yes,No;
     TextView hotel_name,reservation_date,reservation_time,table_id,numberOfGuests,location;
     Button Payment;
     @Override
@@ -210,6 +216,41 @@ public class booking_summary extends AppCompatActivity {
                 Toast.makeText(booking_summary.this, "Payment", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+
+    @Override
+    public void onBackPressed() {
+
+        dialog1 = new Dialog(booking_summary.this,R.style.book_now_pop);
+        WindowManager.LayoutParams wmlp = dialog1.getWindow().getAttributes();
+        wmlp.gravity = Gravity.TOP;
+        wmlp.y=110;
+
+        dialog1.setContentView(R.layout.cancel_resevation);
+        dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
+        dialog1.setCanceledOnTouchOutside(true);
+        Yes = dialog1.findViewById(R.id.Yes1);
+        No = dialog1.findViewById(R.id.No1);
+
+        Yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(booking_summary.this,"Your Reservation Has been Successfully Cancelled....", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(booking_summary.this,MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
+        No.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog1.dismiss();
+            }
+        });
+        dialog1.show();
     }
 
     private void setUpRecyclerView(Query query) {
