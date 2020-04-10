@@ -1,6 +1,7 @@
 package com.example.isitvacant;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -23,7 +24,11 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -106,49 +111,122 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                      @Override
                      public void onClick(View v) {
                          String uid = FirebaseAuth.getInstance().getUid();
+                         String uid2 = FirebaseAuth.getInstance().getUid();
                          bookDate = getIntent().getStringExtra("bookDate");
                          timeSlot = getIntent().getStringExtra("timeSlot");
                          no_of_people = getIntent().getStringExtra("no_of_people");
                          uid = uid.substring(0,8);
                          timeSlot = timeSlot.substring(0,3)+timeSlot.substring(4,6)+timeSlot.substring(7,9);
-                         String invoiceID = "U"+ uid+"D"+bookDate+"T"+timeSlot+"P"+no_of_people+"FOY";
+                         final String invoiceID = "U"+ uid+"D"+bookDate+"T"+timeSlot+"P"+no_of_people+"FOY";
+
+                         DocumentReference documentReferences = FirebaseFirestore.getInstance().collection("users").document(uid2).collection("previous_reservations").document(invoiceID);
+                         documentReferences.addSnapshotListener(BookingActivity.this, new EventListener<DocumentSnapshot>() {
+                             @Override
+                             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
 
 
 
-                         Intent intent = new Intent(getApplicationContext(),FoodOdering.class);
-                         intent.putExtra("restoUid",getIntent().getStringExtra("restoUid"));
-                         intent.putExtra("invoiceID",invoiceID);
-                         intent.putExtra("tableIDlist",tableids1);
-                         intent.putExtra("bookDate",bookDate);
-                         intent.putExtra("timeSlot",timeSlot);
-                         intent.putExtra("no_of_people",no_of_people);
-                         intent.putExtra("flag","yes");
 
 
-                         startActivity(intent);
+                             if(documentSnapshot.exists()){
+
+                                 Toast.makeText(BookingActivity.this, "This Reservation has already been booked before....please select another!!", Toast.LENGTH_SHORT).show();
+                                 Intent intent = new Intent(BookingActivity.this,RestaurantsDetails.class);
+                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                 intent.putExtra("uid",getIntent().getStringExtra("restoUid"));
+                                 startActivity(intent);
+                             }
+                             else{
+
+
+                                 Intent intent = new Intent(getApplicationContext(),FoodOdering.class);
+                                 intent.putExtra("restoUid",getIntent().getStringExtra("restoUid"));
+                                 intent.putExtra("invoiceID",invoiceID);
+                                 intent.putExtra("tableIDlist",tableids1);
+                                 intent.putExtra("bookDate",bookDate);
+                                 intent.putExtra("timeSlot",timeSlot);
+                                 intent.putExtra("no_of_people",no_of_people);
+                                 intent.putExtra("flag","yes");
+                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+
+
+                                 startActivity(intent);
+
+                             }
+
+
+
+
+
+
+
+
+                             }
+                         });
+
+
+
                      }
                  });
                  No.setOnClickListener(new View.OnClickListener() {
                      @Override
                      public void onClick(View v) {
                          String uid = FirebaseAuth.getInstance().getUid();
+                         String uid2 = FirebaseAuth.getInstance().getUid();
                          bookDate = getIntent().getStringExtra("bookDate");
                          timeSlot = getIntent().getStringExtra("timeSlot");
                          no_of_people = getIntent().getStringExtra("no_of_people");
                          uid = uid.substring(0,8);
                          timeSlot = timeSlot.substring(0,3)+timeSlot.substring(4,6)+timeSlot.substring(7,9);
-                         String invoiceID = "U"+ uid+"D"+bookDate+"T"+timeSlot+"P"+no_of_people+"FON";
-                         Intent intent = new Intent(getApplicationContext(),booking_summary.class);
-                         intent.putExtra("restoUid",getIntent().getStringExtra("restoUid"));
-                         intent.putExtra("invoiceID",invoiceID);
-                         intent.putExtra("tableIDlist",tableids1);
-                         intent.putExtra("bookDate",bookDate);
-                         intent.putExtra("timeSlot",timeSlot);
-                         intent.putExtra("no_of_people",no_of_people);
-                         intent.putExtra("flag","no");
+                         final String invoiceID = "U"+ uid+"D"+bookDate+"T"+timeSlot+"P"+no_of_people+"FON";
+
+                         DocumentReference documentReferences = FirebaseFirestore.getInstance().collection("users").document(uid2).collection("previous_reservations").document(invoiceID);
+                         documentReferences.addSnapshotListener(BookingActivity.this, new EventListener<DocumentSnapshot>() {
+                             @Override
+                             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
 
 
-                         startActivity(intent);
+
+
+
+                                 if(documentSnapshot.exists()){
+
+                                     Toast.makeText(BookingActivity.this, "This Reservation has already been booked before....please select another!!", Toast.LENGTH_SHORT).show();
+                                     Intent intent = new Intent(BookingActivity.this,RestaurantsDetails.class);
+                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                     intent.putExtra("uid",getIntent().getStringExtra("restoUid"));
+                                     startActivity(intent);
+                                 }
+                                 else{
+
+
+                                     Intent intent = new Intent(getApplicationContext(),booking_summary.class);
+                                     intent.putExtra("restoUid",getIntent().getStringExtra("restoUid"));
+                                     intent.putExtra("invoiceID",invoiceID);
+                                     intent.putExtra("tableIDlist",tableids1);
+                                     intent.putExtra("bookDate",bookDate);
+                                     intent.putExtra("timeSlot",timeSlot);
+                                     intent.putExtra("no_of_people",no_of_people);
+                                     intent.putExtra("flag","no");
+                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+
+                                     startActivity(intent);
+
+                                 }
+
+
+
+
+
+
+
+
+                             }
+                         });
+
+
 
                      }
                  });
@@ -165,7 +243,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
         layoutSeat.setLayoutParams(params);
         layoutSeat.setPadding(0 * seatGaping, 0 * seatGaping, 0 * seatGaping, 0 * seatGaping);
         layout.addView(layoutSeat);
-        Toast.makeText(BookingActivity.this, getIntent().getStringExtra("bookDate")+"  "+getIntent().getStringExtra("timeSlot")+"  "+getIntent().getStringExtra("no_of_people"), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(BookingActivity.this, getIntent().getStringExtra("bookDate")+"  "+getIntent().getStringExtra("timeSlot")+"  "+getIntent().getStringExtra("no_of_people"), Toast.LENGTH_SHORT).show();
 
 
         LinearLayout layout = null;

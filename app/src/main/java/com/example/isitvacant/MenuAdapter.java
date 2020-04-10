@@ -129,7 +129,7 @@ public class MenuAdapter extends FirestoreRecyclerAdapter<ModelMenu, MenuAdapter
                     userMap.put("quantity", newValue);
                     userMap.put("type", types);
 
-                    Toast.makeText(v.getContext(), name+"  "+image, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(v.getContext(), name+"  "+image, Toast.LENGTH_SHORT).show();
 
 
 
@@ -141,7 +141,7 @@ public class MenuAdapter extends FirestoreRecyclerAdapter<ModelMenu, MenuAdapter
                             .set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Toast.makeText(itemView.getContext(), "Item Added", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(itemView.getContext(), "Item Added", Toast.LENGTH_LONG).show();
 
                         }
 
@@ -252,7 +252,7 @@ public class MenuAdapter extends FirestoreRecyclerAdapter<ModelMenu, MenuAdapter
                                         .set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Toast.makeText(itemView.getContext(), "Item Added", Toast.LENGTH_LONG).show();
+                                       // Toast.makeText(itemView.getContext(), "Item Added", Toast.LENGTH_LONG).show();
 
                                     }
 

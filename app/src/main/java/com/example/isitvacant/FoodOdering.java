@@ -1,5 +1,6 @@
 package com.example.isitvacant;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -9,17 +10,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,6 +44,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class FoodOdering extends AppCompatActivity {
+    Dialog dialog1;
+    CardView Yes,No;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -67,6 +75,7 @@ public class FoodOdering extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_odering);
+
 
         mViewPager = findViewById(R.id.main_tabs_pager);
         myFoodAccessAdapter = new FoodAccessAdapter(getSupportFragmentManager());
@@ -170,7 +179,180 @@ Query query;
 
     }
 
+    @Override
+    public void onBackPressed() {
 
+        dialog1 = new Dialog(FoodOdering.this,R.style.book_now_pop);
+        WindowManager.LayoutParams wmlp = dialog1.getWindow().getAttributes();
+        wmlp.gravity = Gravity.TOP;
+        wmlp.y=110;
+
+        dialog1.setContentView(R.layout.cancel_resevation);
+        dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
+        dialog1.setCanceledOnTouchOutside(true);
+        Yes = dialog1.findViewById(R.id.Yes1);
+        No = dialog1.findViewById(R.id.No1);
+
+        Yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDestroy();
+            }
+        });
+        No.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog1.dismiss();
+            }
+        });
+        dialog1.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+
+
+        final String restoID = getIntent().getStringExtra("restoUid");
+        String invoiceId = getIntent().getStringExtra("invoiceID");
+
+
+
+        mstore.collection("/users/" + uid + "/current_reservations/" + invoiceId + "/cart")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+
+
+                        final List<String> cartUid = new ArrayList<>();
+
+                        for (QueryDocumentSnapshot doc : value) {
+                            if (doc.get("foodName") != null) {
+                                cartUid.add(doc.getString("foodName"));
+                                //Toast.makeText(GroupProfileActivity.this, "Messages is: "+value,Toast.LENGTH_LONG).show();
+                            }
+                        }
+                        //Toast.makeText(GroupChatActivity.this, "Messages are: "+allMssages,Toast.LENGTH_LONG).show();
+
+
+                        if (cartUid.size() != 0) {
+
+                            for (int i = 0; i < cartUid.size(); i++) {
+
+                                final String foodName = cartUid.get(i);
+
+                                final String uid2 = FirebaseAuth.getInstance().getUid();
+                                String invoiceId = getIntent().getStringExtra("invoiceID");
+
+                                mstore.collection("users")
+                                        .document(uid2).collection("current_reservations").document(invoiceId).collection("cart").document(foodName)
+                                        .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+
+                                    }
+
+
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        String error = e.getMessage();
+                                        Toast.makeText(FoodOdering.this, "Error" + error, Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+
+
+
+
+                                mstore.collection("restaurants")
+                                        .document(restoID).collection("current_reservations").document(invoiceId).collection("cart").document(foodName)
+                                        .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+
+                                    }
+
+
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        String error = e.getMessage();
+                                        Toast.makeText(FoodOdering.this, "Error" + error, Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+                                mstore.collection("restaurants")
+                                        .document(restoID).collection("current_reservations").document(invoiceId)
+                                        .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+
+                                    }
+
+
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        String error = e.getMessage();
+                                        Toast.makeText(FoodOdering.this, "Error" + error, Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                                mstore.collection("users")
+                                        .document(uid2).collection("current_reservations").document(invoiceId)
+                                        .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+
+
+                                    }
+
+
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        String error = e.getMessage();
+                                        Toast.makeText(FoodOdering.this, "Error" + error, Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+
+
+
+
+
+
+
+
+
+
+                            }
+
+
+
+
+
+                        }
+
+
+
+                    }
+                });
+
+
+
+
+    }
 }
 
 

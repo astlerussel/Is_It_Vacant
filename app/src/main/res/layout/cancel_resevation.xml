@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="200dp"
+        app:cardCornerRadius="15dp"
+        app:cardBackgroundColor="#fff"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Are You Sure You Want To Cancel?"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:textColor="#0091EA"/>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/Yes1"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginLeft="70dp"
+            app:cardCornerRadius="10dp"
+            app:cardBackgroundColor="#fff"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Yes"
+                android:gravity="center"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:textColor="#FF6D00"
+                />
+
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/No1"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginLeft="200dp"
+            app:cardCornerRadius="10dp"
+            app:cardBackgroundColor="#fff"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="No"
+                android:gravity="center"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:textColor="#FF6D00"
+
+                />
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
