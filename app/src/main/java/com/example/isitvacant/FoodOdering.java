@@ -165,6 +165,7 @@ Query query;
                         intent.putExtra("timeSlot",getIntent().getStringExtra("timeSlot"));
                         intent.putExtra("no_of_people",getIntent().getStringExtra("no_of_people"));
                         intent.putExtra("flag","yes");
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                     }
                 });
