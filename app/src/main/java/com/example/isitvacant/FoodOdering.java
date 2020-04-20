@@ -199,7 +199,7 @@ Query query;
         Yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onDestroy();
+                onPressedBack();
             }
         });
         No.setOnClickListener(new View.OnClickListener() {
@@ -211,10 +211,10 @@ Query query;
         dialog1.show();
     }
 
-    @Override
-    protected void onDestroy() {
 
-        super.onDestroy();
+    public void onPressedBack() {
+
+
 
 
         final String restoID = getIntent().getStringExtra("restoUid");
