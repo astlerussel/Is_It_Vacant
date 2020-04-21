@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Thank_You"
+    android:background="#fff">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/namaste"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"
+        android:scaleType="fitXY"
+        />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/thank"
+            />
+
+    <TextView
+        android:id="@+id/Home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        android:text="Back To Home"
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:drawableLeft="@drawable/home_24dp"
+        android:drawablePadding="5dp"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center"
+        android:textColor="#0091EA"
+        />
+
+
+
+</LinearLayout>
