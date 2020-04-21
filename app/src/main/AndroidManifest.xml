@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Thank_You"></activity>
         <activity android:name=".spash_screen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,9 +43,7 @@
         <activity android:name=".VerifyActivity" />
         <activity android:name=".AuthActivity" />
         <activity android:name=".HomeName" />
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity"></activity>
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
