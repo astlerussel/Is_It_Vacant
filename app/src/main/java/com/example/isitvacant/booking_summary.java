@@ -197,7 +197,6 @@ public class booking_summary extends AppCompatActivity {
                         .set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        finishAffinity();
                        Intent intent = new Intent(booking_summary.this,MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
